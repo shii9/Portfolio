@@ -1,0 +1,96 @@
+import express from 'express';
+import cors from 'cors';
+import fs from 'fs';
+import path from 'path';
+import dotenv from 'dotenv';
+import nodemailer from 'nodemailer';
+
+dotenv.config();
+
+const app = express();
+const port = process.env.PORT || 5174;
+
+app.use(cors());
+app.use(express.json());
+
+const dataDir = path.resolve(process.cwd(), 'server_data');
+const messagesFile = path.join(dataDir, 'messages.json');
+
+function ensureStorage(): void {
+  if (!fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir, { recursive: true });
+  }
+  if (!fs.existsSync(messagesFile)) {
+    fs.writeFileSync(messagesFile, '[]', 'utf-8');
+  }
+}
+
+ensureStorage();
+
+app.get('/health', (_req, res) => {
+  res.json({ status: 'ok' });
+});
+
+app.post('/api/contact', async (req, res) => {
+  const { name, email, subject, message } = req.body || {};
+  if (!name || !email || !subject || !message) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  try {
+    const entry = {
+      id: Date.now().toString(),
+      name,
+      email,
+      subject,
+      message,
+      createdAt: new Date().toISOString(),
+    };
+
+    const existingRaw = fs.readFileSync(messagesFile, 'utf-8');
+    const existing = JSON.parse(existingRaw) as any[];
+    existing.push(entry);
+    fs.writeFileSync(messagesFile, JSON.stringify(existing, null, 2));
+
+    if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS && process.env.TO_EMAIL) {
+      const transporter = nodemailer.createTransport({
+        host: process.env.SMTP_HOST,
+        port: parseInt(process.env.SMTP_PORT || '587', 10),
+        secure: process.env.SMTP_SECURE === 'true',
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASS,
+        },
+      });
+
+      await transporter.sendMail({
+        from: process.env.FROM_EMAIL || process.env.SMTP_USER,
+        to: process.env.TO_EMAIL,
+        subject: `[Contact] ${subject}`,
+        text: `Name: ${name}\nEmail: ${email}\nSubject: ${subject}\n\n${message}`,
+        html: `<p><strong>Name:</strong> ${name}</p><p><strong>Email:</strong> ${email}</p><p><strong>Subject:</strong> ${subject}</p><pre>${message}</pre>`,
+      });
+    }
+
+    res.json({ ok: true });
+  } catch (err) {
+    console.error('Failed to handle contact:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.get('/api/messages', (_req, res) => {
+  try {
+    const existingRaw = fs.readFileSync(messagesFile, 'utf-8');
+    const existing = JSON.parse(existingRaw);
+    res.json(existing);
+  } catch (e) {
+    res.status(500).json({ error: 'Failed to read messages' });
+  }
+});
+
+app.listen(port, () => {
+  console.log(`Server listening on http://localhost:${port}`);
+});
+
+
