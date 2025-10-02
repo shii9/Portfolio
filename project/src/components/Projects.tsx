@@ -99,7 +99,6 @@ const Projects: React.FC = () => {
           {projects.map((project, index) => {
             const Icon = project.icon as any;
             const hasCode = Boolean(project.codeLink && project.codeLink.trim());
-            const hasDemo = Boolean(project.demoLink && project.demoLink.trim());
 
             const linkButtonBase =
               'flex items-center space-x-2 px-6 py-3 rounded-lg font-semibold transition-all duration-300';
@@ -186,24 +185,6 @@ const Projects: React.FC = () => {
                       <div className={codeBtnDisabledClass} aria-hidden>
                         <Github className="w-4 h-4" />
                         <span>Code</span>
-                      </div>
-                    )}
-
-                    {hasDemo ? (
-                      <a
-                        href={project.demoLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={demoBtnClass}
-                        aria-label={`${project.title} - Live Demo`}
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                        <span>Demo</span>
-                      </a>
-                    ) : (
-                      <div className={demoBtnDisabledClass} aria-hidden>
-                        <ExternalLink className="w-4 h-4" />
-                        <span>Demo</span>
                       </div>
                     )}
                   </div>
