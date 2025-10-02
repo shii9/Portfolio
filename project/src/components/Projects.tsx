@@ -29,15 +29,9 @@ const Projects: React.FC = () => {
       icon: Shield,
       tech: ['Go'],
       color: 'from-green-500 to-emerald-600',
-      features: [
-        'DNS',
-        'Port scanning',
-        'Subdomain Enumeration',
-        'Whois Lookup',
-        'Js recon',
-        'Directory Enumeration',
-      ],
+      features: ['DNS', 'Port scanning', 'Subdomain Enumeration', 'Whois Lookup', 'Js recon', 'Directory Enumeration'],
       codeLink: 'https://github.com/yourusername/reconnio',
+      demoLink: 'https://reconnio-demo.example.com'
     },
     {
       title: 'Steganography Tool',
@@ -46,73 +40,52 @@ const Projects: React.FC = () => {
       icon: Globe,
       tech: ['Python', 'Tkinter'],
       color: 'from-purple-500 to-pink-600',
-      features: [
-        'Image Steganography',
-        'Video Steganography',
-        'Audio Steganography',
-        'Text Steganography',
-        'Audio Steganography',
-      ],
+      features: ['Image Steganography', 'Video Steganography', 'Audio Steganography', 'Text Steganography', 'Audio Steganography'],
       codeLink: 'https://github.com/shii9/Steganography',
+      demoLink: '' // no demo for CLI projects — keep empty string or remove
     },
     {
       title: 'AI-Powered Threat Detection (Working)',
-      description:
-        'Machine learning system for real-time network anomaly detection and threat classification.',
+      description: 'Machine learning system for real-time network anomaly detection and threat classification.',
       icon: Brain,
-      tech: ['Python', 'TensorFlow', 'Scikit-learn', 'Pandas', 'GUI'],
+      tech: ['Python', 'TensorFlow', 'Scikit-learn', 'Pandas','GUI'],
       color: 'from-blue-500 to-cyan-600',
       features: ['Real-time Analysis', 'ML Classification', 'Alert System'],
       codeLink: 'https://github.com/yourusername/ai-threat-detection',
+      demoLink: 'https://ai-threat-demo.example.com'
     },
     {
       title: 'Malware Development (Educational Purpose)',
-      description:
-        'Development of various types of malware for educational and research purposes.',
+      description: 'Development of various types of malware for educational and research purposes.',
       icon: Lock,
       tech: ['Python'],
       color: 'from-orange-500 to-red-600',
       features: ['Multiple Algorithms', 'Key Management', 'Digital Signatures'],
       codeLink: 'https://github.com/shii9/Malware',
+      demoLink: ''
     },
     {
       title: 'Nio — AI Assistant',
-      description:
-        'Nio AI Assistant is a modular virtual assistant that supports voice and text, combining NLP, speech recognition, text-to-speech, image generation, automation, and real-time data access.',
-      icon: Shield,
+      description: 'Nio AI Assistant is a modular virtual assistant that supports voice and text, combining NLP, speech recognition, text-to-speech, image generation, automation, and real-time data access.',
+      icon: Brain,
       tech: ['Python', 'Tkinter', 'AI'],
-      color: 'from-indigo-500 to-violet-600',
-      features: [
-        'ChatBot',
-        'Image Generation',
-        'Automation',
-        'Real-time Information retrieval',
-        'Speech Recognition & Text-to-Speech',
-      ],
+      color: 'from-red-500 to-cyan-600',
+      features: ['ChatBot', 'Image Generation', 'Automation', 'Real-time Information retrieval', 'Speech Recognition & Text-to-Speech'],
       codeLink: 'https://github.com/shii9/Nio-AI-Assistant',
     },
     {
       title: 'Keylogger',
-      description:
-        'Keylogger is a lightweight, GUI-based input-capture research tool intended strictly for supervised lab use, authorized red-team engagements, and developer debugging. Emphasis on privacy, consent, and encrypted local storage.',
-      icon: Globe,
+      description: 'Keylogger is a lightweight, GUI-based input-capture research tool intended strictly for supervised lab use, authorized red-team engagements, and developer debugging. Emphasis on privacy, consent, and encrypted local storage.',
+      icon: Lock,
       tech: ['Python', 'Tkinter'],
-      color: 'from-yellow-400 to-orange-500',
-      features: [
-        'Controlled keystroke capture (sandboxed)',
-        'GUI controls & audit trail',
-        'Encrypted export / optional send-to-email',
-        'Consent-first defaults',
-      ],
+      color: 'from-yellow-500 to-red-600',
+      features: ['Keystrock locker', 'GUI based', 'Send to Email'],
       codeLink: 'https://github.com/shii9/Keylogger',
-    },
+    }
   ];
 
   return (
-    <section
-      id="projects"
-      className="py-20 bg-white dark:bg-gray-800 relative overflow-hidden"
-    >
+    <section id="projects" className="py-20 bg-white dark:bg-gray-800 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div ref={projectsRef} className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
@@ -122,8 +95,7 @@ const Projects: React.FC = () => {
           </h2>
           <div className="w-20 h-1 bg-gradient-to-r from-green-500 to-blue-600 rounded-full mx-auto mb-6"></div>
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-            Innovative cybersecurity solutions and tools developed with
-            cutting-edge technologies
+            Innovative cybersecurity solutions and tools developed with cutting-edge technologies
           </p>
         </div>
 
@@ -141,6 +113,8 @@ const Projects: React.FC = () => {
 
             const demoBtnClass =
               'flex items-center space-x-2 px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg font-semibold hover:border-green-500 hover:text-green-500 transition-all duration-300 hover:scale-105';
+            const demoBtnDisabledClass =
+              'flex items-center space-x-2 px-6 py-3 border border-gray-200 dark:border-gray-700 text-gray-400 rounded-lg font-semibold pointer-events-none opacity-60';
 
             return (
               <div
@@ -165,9 +139,7 @@ const Projects: React.FC = () => {
                     {project.title}
                   </h3>
 
-                  <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
-                    {project.description}
-                  </p>
+                  <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">{project.description}</p>
 
                   {/* Features */}
                   <div className="mb-6">
@@ -175,21 +147,12 @@ const Projects: React.FC = () => {
                       Key Features
                     </h4>
                     <div className="space-y-2">
-                      {project.features.map(
-                        (feature: string, featureIndex: number) => (
-                          <div
-                            key={featureIndex}
-                            className="flex items-center space-x-2"
-                          >
-                            <div
-                              className={`w-2 h-2 rounded-full bg-gradient-to-r ${project.color}`}
-                            ></div>
-                            <span className="text-sm text-gray-600 dark:text-gray-400">
-                              {feature}
-                            </span>
-                          </div>
-                        )
-                      )}
+                      {project.features.map((feature: string, featureIndex: number) => (
+                        <div key={featureIndex} className="flex items-center space-x-2">
+                          <div className={`w-2 h-2 rounded-full bg-gradient-to-r ${project.color}`}></div>
+                          <span className="text-sm text-gray-600 dark:text-gray-400">{feature}</span>
+                        </div>
+                      ))}
                     </div>
                   </div>
 
@@ -230,8 +193,7 @@ const Projects: React.FC = () => {
                       </div>
                     )}
 
-                    {/* Only show Demo if link exists */}
-                    {hasDemo && (
+                    {hasDemo ? (
                       <a
                         href={project.demoLink}
                         target="_blank"
@@ -242,6 +204,11 @@ const Projects: React.FC = () => {
                         <ExternalLink className="w-4 h-4" />
                         <span>Demo</span>
                       </a>
+                    ) : (
+                      <div className={demoBtnDisabledClass} aria-hidden>
+                        <ExternalLink className="w-4 h-4" />
+                        <span>Demo</span>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -258,7 +225,8 @@ const Projects: React.FC = () => {
         {/* View all projects button */}
         <div className="text-center mt-12">
           <button className="px-8 py-4 bg-gradient-to-r from-green-500 to-blue-600 text-white rounded-lg font-semibold hover:shadow-xl hover:scale-105 transition-all duration-300 hover:shadow-green-500/25">
-            <a href="https://github.com/shii9">View All Projects on GitHub</a>
+            <a href='https://github.com/shii9'>
+            View All Projects on GitHub</a>
           </button>
         </div>
       </div>
