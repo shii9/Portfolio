@@ -21,6 +21,9 @@ const Hero: React.FC = () => {
     return () => observer.disconnect();
   }, []);
 
+  // Use Vite base URL so the link works under /Portfolio/ on GitHub Pages
+  const resumeHref = `${import.meta.env.BASE_URL}resume.pdf`;
+
   return (
     <section id="hero" ref={heroRef} className="min-h-screen flex items-center justify-center relative overflow-hidden">
       {/* Matrix-style background animation */}
@@ -62,13 +65,17 @@ const Hero: React.FC = () => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <button className="group relative px-8 py-4 bg-gradient-to-r from-green-500 to-blue-600 text-white rounded-lg font-semibold overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-green-500/25">
+            <a
+              href={resumeHref}
+              download
+              className="group relative px-8 py-4 bg-gradient-to-r from-green-500 to-blue-600 text-white rounded-lg font-semibold overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-green-500/25"
+            >
               <span className="relative z-10 flex items-center space-x-2">
                 <Download className="w-5 h-5" />
                 <span>Download Resume</span>
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-green-600 to-blue-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </button>
+            </a>
 
             <button 
               onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
