@@ -23,7 +23,7 @@ const Projects: React.FC = () => {
 
   const projects = [
     {
-      title: 'ReconNio tools for reconnaissance',
+      title: 'ReconNio tools for reconnaissance (Working)',
       description:
         'Complete reconnaissance and vulnerability assessment tool with finding all kind of information for recon.',
       icon: Shield,
@@ -31,7 +31,6 @@ const Projects: React.FC = () => {
       color: 'from-green-500 to-emerald-600',
       features: ['DNS', 'Port scanning', 'Subdomain Enumeration', 'Whois Lookup', 'Js recon', 'Directory Enumeration'],
       codeLink: 'https://github.com/yourusername/reconnio',
-      demoLink: 'https://reconnio-demo.example.com'
     },
     {
       title: 'Steganography Tool',
@@ -42,7 +41,6 @@ const Projects: React.FC = () => {
       color: 'from-purple-500 to-pink-600',
       features: ['Image Steganography', 'Video Steganography', 'Audio Steganography', 'Text Steganography', 'Audio Steganography'],
       codeLink: 'https://github.com/shii9/Steganography',
-      demoLink: '' // no demo for CLI projects — keep empty string or remove
     },
     {
       title: 'AI-Powered Threat Detection (Working)',
@@ -52,7 +50,6 @@ const Projects: React.FC = () => {
       color: 'from-blue-500 to-cyan-600',
       features: ['Real-time Analysis', 'ML Classification', 'Alert System'],
       codeLink: 'https://github.com/yourusername/ai-threat-detection',
-      demoLink: 'https://ai-threat-demo.example.com'
     },
     {
       title: 'Malware Development (Educational Purpose)',
@@ -62,7 +59,6 @@ const Projects: React.FC = () => {
       color: 'from-orange-500 to-red-600',
       features: ['Multiple Algorithms', 'Key Management', 'Digital Signatures'],
       codeLink: 'https://github.com/shii9/Malware',
-      demoLink: ''
     },
     {
       title: 'Nio — AI Assistant',
