@@ -303,7 +303,7 @@ export default function Research() {
                       rel="noopener noreferrer"
                       className="inline-flex items-center justify-center gap-2 text-sm font-semibold text-foreground bg-foreground/5 hover:bg-foreground/10 border border-foreground/10 px-4 py-1.5 rounded-full transition-[background-color,border-color,color] duration-200"
                     >
-                      Read Article <ExternalLink size={14} className="group-hover:translate-x-1 transition-transform" />
+                      Read More <ExternalLink size={14} className="group-hover:translate-x-1 transition-transform" />
                     </a>
                   </div>
                 </motion.div>
