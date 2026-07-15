@@ -227,7 +227,7 @@ export default function Navbar() {
           </div>
 
           <a
-            href="/resume.pdf"
+            href={`${import.meta.env.BASE_URL}resume.pdf`}
             download="Sourov_Hossen_Resume.pdf"
             target="_blank"
             rel="noopener noreferrer"
@@ -385,7 +385,7 @@ export default function Navbar() {
                 </div>
 
                  <a
-                  href="/resume.pdf"
+                  href={`${import.meta.env.BASE_URL}resume.pdf`}
                   download="Sourov_Hossen_Resume.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
