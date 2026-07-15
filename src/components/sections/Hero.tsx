@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import heroImage from "@/assets/hero-custom.png";
 import { motion, AnimatePresence, useReducedMotion, type Variants } from "framer-motion";
 import { Github, Linkedin, Twitter, ArrowRight, FolderGit2, MapPin, GraduationCap, Sparkles } from "lucide-react";
 import CyberShield3D from "@/components/ui/CyberShield3D";
@@ -196,7 +197,7 @@ export default function Hero() {
               {/* Inner gradient wash */}
               <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent z-10 pointer-events-none" />
               <img
-                src={`${import.meta.env.BASE_URL}hero-custom.png`}
+                src={heroImage}
                 alt="Sourov Hossen — Security Researcher"
                 className="relative z-0 w-full h-full object-cover object-top select-none"
                 loading="eager"
