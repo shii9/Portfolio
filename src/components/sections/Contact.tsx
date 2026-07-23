@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Github, Linkedin, Twitter, Mail, Newspaper, Send } from "lucide-react";
+import { Github, Linkedin, Mail, Newspaper } from "lucide-react";
 import { fadeUpProps } from "@/lib/animations";
 
 const socials = [
@@ -18,13 +18,6 @@ const socials = [
     bg: "hover:bg-[#0a66c2]/10 hover:border-[#0a66c2]/30",
   },
   {
-    name: "Twitter / X",
-    icon: Twitter,
-    href: "https://x.com/Shiii999999",
-    label: "@Shiii999999",
-    bg: "hover:bg-sky-500/10 hover:border-sky-500/30",
-  },
-  {
     name: "Medium",
     icon: Newspaper,
     href: "https://shii9.medium.com/",
@@ -37,13 +30,6 @@ const socials = [
     href: "mailto:sourovlimon85@gmail.com",
     label: "sourovlimon85@gmail.com",
     bg: "hover:bg-primary/10 hover:border-primary/30",
-  },
-  {
-    name: "Telegram",
-    icon: Send,
-    href: "https://t.me/Mr_SHI_9",
-    label: "@Mr_SHI_9",
-    bg: "hover:bg-blue-500/10 hover:border-blue-500/30",
   },
 ];
 
