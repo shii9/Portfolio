@@ -45,6 +45,18 @@ const researchData = [
 const writeupsData = [
   {
     type: "Write-up",
+    role: "curl: The Complete Reference (Beginner to Advanced)",
+    company: "GitHub",
+    date: "July 2026",
+    link: "https://github.com/shii9/Blog-By-Me/blob/main/curl_mastering.md",
+    highlight: "Published",
+    icon: FileText,
+    description:
+      "A complete reference on curl, covering beginner fundamentals, anatomy of requests, master flag reference, HTTP methods, authentication, proxying, cookies, TLS/SSL, automation, and security research arsenal.",
+    tags: ["curl", "Command Line", "Bug Bounty", "Network Security", "Automation"],
+  },
+  {
+    type: "Write-up",
     role: "Mastering FFUF: The Complete Guide to Fast Web Fuzzing with FFUF (Fuzz Faster U Fool)",
     company: "Medium",
     date: "July 2026",
