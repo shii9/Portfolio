@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Trophy, Medal, ShieldCheck, Flag, Target, Network, ExternalLink } from "lucide-react";
+import { Flag, Target, Medal, ShieldCheck, Network, ExternalLink } from "lucide-react";
 import { fadeUpProps, fadeSubtleProps } from "@/lib/animations";
 
 const achievementsData = [
@@ -22,6 +22,18 @@ const achievementsData = [
 ];
 
 const certificationsData = [
+  {
+    type: "Certification",
+    role: "Networks and Network Security",
+    company: "Google",
+    date: "Jul 2026",
+    link: "https://www.coursera.org/account/accomplishments/verify/CRA9MYTHSTMZ",
+    highlight: "Certified",
+    icon: Network,
+    description:
+      "This Google Cybersecurity course covers network architecture, protocols, VPNs, firewalls, intrusion detection, and system‑hardening techniques.",
+    tags: ["Networking", "Network Security", "VPN", "Firewall", "Intrusion Detection", "Cloud Security"],
+  },
   {
     type: "Certification",
     role: "CompTIA Security+",
