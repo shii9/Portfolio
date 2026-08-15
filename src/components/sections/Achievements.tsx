@@ -24,6 +24,18 @@ const achievementsData = [
 const certificationsData = [
   {
     type: "Certification",
+    role: "Google Cybersecurity Professional",
+    company: "Google",
+    date: "Jul 2026",
+    link: "https://www.coursera.org/account/accomplishments/professional-cert/F5W7JBI7K80M",
+    highlight: "Certified",
+    icon: ShieldCheck,
+    description:
+      "Professional certification covering security foundations, network and system security, Linux, Python, detection, and incident response workflows.",
+    tags: ["Cybersecurity", "SOC", "Network Security", "Incident Response"],
+  },
+  {
+    type: "Certification",
     role: "Networks and Network Security",
     company: "Google",
     date: "Jul 2026",
@@ -218,7 +230,7 @@ export default function Achievements() {
         <a
           href="https://www.linkedin.com/in/sourov-hossen-307655351/details/certifications/"
           target="_blank"
-          rel="noreferrer"
+          rel="noopener noreferrer"
           className="inline-flex items-center justify-center gap-2 text-sm font-semibold text-white bg-primary/90 hover:bg-primary border border-primary/40 px-6 py-2.5 rounded-full transition-[background-color,box-shadow] duration-200 hover:shadow-[0_0_24px_rgba(255,107,53,0.35)]"
         >
           View All Certificates

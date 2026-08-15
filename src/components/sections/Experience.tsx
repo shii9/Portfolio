@@ -1,9 +1,20 @@
 import { motion } from "framer-motion";
-import { GraduationCap, Award, Terminal, Code, BookOpen } from "lucide-react";
+import { GraduationCap, Award, Terminal, Code, BookOpen, ShieldCheck } from "lucide-react";
 import { fadeUpProps } from "@/lib/animations";
 import { Section, GlowBlob, SectionHeading } from "@/components/layout/Section";
 
 const timelineData = [
+  {
+    type: "Experience & Training",
+    role: "Aspiring SOC Analyst — Blue Team",
+    company: "Independent / Blue-Team Labs",
+    date: "2026 — Present",
+    highlight: null,
+    icon: ShieldCheck,
+    description:
+      "Building hands-on security operations skills through blue-team labs, alert triage, log analysis, threat detection, and incident response practice.",
+    tags: ["SOC", "Blue Team", "Threat Detection", "Incident Response"],
+  },
   {
     type: "Experience & Training",
     role: "Bug Hunting & Penetration Testing",
@@ -30,7 +41,7 @@ const timelineData = [
     type: "Experience & Training",
     role: "Network Security Enthusiast",
     company: "Independent Homelab Projects",
-    date: "2024 — Present",
+    date: "2025 — Present",
     highlight: null,
     icon: Code,
     description:

@@ -228,14 +228,14 @@ export default function Navbar() {
 
           <a
             href={`${import.meta.env.BASE_URL}resume.pdf`}
-            download="Sourov_Hossen_Resume.pdf"
+            download="Sourov_Hossen_CV.pdf"
             target="_blank"
             rel="noopener noreferrer"
-            data-testid="button-download-resume"
+            data-testid="button-download-cv"
             className="flex items-center justify-center gap-2 text-sm font-semibold text-white bg-primary hover:bg-primary/85 px-4 h-11 rounded-full transition-all duration-200 hover:shadow-[0_0_22px_rgba(255,107,53,0.45)]"
           >
             <Download size={16} />
-            <span>Download Resume</span>
+            <span>Download CV</span>
           </a>
         </nav>
 
@@ -386,7 +386,7 @@ export default function Navbar() {
 
                  <a
                   href={`${import.meta.env.BASE_URL}resume.pdf`}
-                  download="Sourov_Hossen_Resume.pdf"
+                  download="Sourov_Hossen_CV.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
                   onClickCapture={(e) => {
@@ -396,7 +396,7 @@ export default function Navbar() {
                   className="flex items-center justify-center gap-2 w-full text-sm font-semibold text-white bg-primary hover:bg-primary/90 px-6 py-3.5 rounded-full transition-all hover:shadow-[0_0_24px_rgba(255,107,53,0.45)]"
                 >
                   <Download size={16} />
-                  <span>Download Resume</span>
+                  <span>Download CV</span>
                 </a>
               </div>
             </motion.div>

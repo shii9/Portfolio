@@ -1,23 +1,26 @@
 import { motion } from "framer-motion";
-import { Github, ExternalLink, Shield, Terminal, Search, Lock, Network, Code, Link2, Cpu, EyeOff } from "lucide-react";
+import { Github, ExternalLink, Shield, Terminal, Search, Link2, Cpu, EyeOff } from "lucide-react";
 import { fadeUpProps, staggerItemProps } from "@/lib/animations";
 import { Section, GlowBlob, SectionHeading } from "@/components/layout/Section";
 
+// Newest projects first, based on GitHub repository creation dates.
 const projects = [
   {
-    title: "UrlShine",
+    title: "EchoMe",
+    date: "Aug 2026",
     description:
-      "A high-performance URL reconnaissance and normalization engine built in Go. Aggregates, de-duplicates, and normalizes URLs from multiple threat intelligence and search index sources to optimize security scans.",
-    tags: ["Go", "Reconnaissance", "Security Auditing", "Bug Bounty"],
-    icon: Link2,
+      "An AI-powered phishing detection and cybersecurity application that analyzes emails, URLs, domains, IP addresses, files, and screenshots to produce explainable risk assessments and actionable recommendations.",
+    tags: ["React", "TypeScript", "Threat Detection", "AI Security"],
+    icon: Shield,
     status: "Completed",
     statusColor: "text-emerald-400 bg-emerald-400/10 border-emerald-400/20",
-    github: "https://github.com/shii9/UrlShine",
-    demo: null,
-    accent: "#3B82F6",
+    github: "https://github.com/shii9/EchoMe",
+    demo: "https://shii9.github.io/EchoMe/",
+    accent: "#EC4899",
   },
   {
     title: "DorkNio",
+    date: "May 2026",
     description:
       "A powerful Google Dorking platform running entirely in the browser with zero server telemetry. Enables security researchers to locate sensitive files, exposed admin consoles, and potential web vulnerabilities securely.",
     tags: ["HTML", "JavaScript", "OSINT", "Google Dorking"],
@@ -29,9 +32,49 @@ const projects = [
     accent: "#FF6B35",
   },
   {
-    title: "ReconNio",
+    title: "UrlShine",
+    date: "May 2026",
     description:
-      "A modular, multi-threaded active and passive reconnaissance framework written in Go. Automates DNS discovery, target subdomain mapping, port auditing, and banner grabbing for initial attack surface evaluations.",
+      "A high-performance URL reconnaissance and normalization engine built in Go. Aggregates, de-duplicates, and normalizes URLs from multiple threat intelligence and search index sources to optimize security scans.",
+    tags: ["Go", "Reconnaissance", "Security Auditing", "Bug Bounty"],
+    icon: Link2,
+    status: "Completed",
+    statusColor: "text-emerald-400 bg-emerald-400/10 border-emerald-400/20",
+    github: "https://github.com/shii9/UrlShine",
+    demo: null,
+    accent: "#3B82F6",
+  },
+  {
+    title: "Nio AI Assistant",
+    date: "Oct 2025",
+    description:
+      "An AI-powered virtual assistant that combines voice and text interaction with automation, speech recognition, text-to-speech, image generation, and real-time information retrieval.",
+    tags: ["Python", "AI Assistant", "Voice Interaction", "Automation"],
+    icon: Cpu,
+    status: "Completed",
+    statusColor: "text-emerald-400 bg-emerald-400/10 border-emerald-400/20",
+    github: "https://github.com/shii9/Nio-AI-Assistant",
+    demo: null,
+    accent: "#8B5CF6",
+  },
+  {
+    title: "LSB Steganography",
+    date: "Sep 2025",
+    description:
+      "A modern steganography toolkit for hiding encrypted data in image, audio, video, text, and other file carriers using Least Significant Bit techniques.",
+    tags: ["Python", "Steganography", "Cryptography", "Data Concealment"],
+    icon: EyeOff,
+    status: "Completed",
+    statusColor: "text-emerald-400 bg-emerald-400/10 border-emerald-400/20",
+    github: "https://github.com/shii9/Steganography",
+    demo: "https://shii9.github.io/Steganography/",
+    accent: "#F59E0B",
+  },
+  {
+    title: "ReconNio",
+    date: "Jul 2025",
+    description:
+      "A comprehensive Go-based reconnaissance toolkit with specialized modules for domain intelligence, network analysis, web application discovery, OSINT, and security testing.",
     tags: ["Go", "Recon", "DNS Discovery", "Network Auditing"],
     icon: Terminal,
     status: "Completed",
@@ -39,42 +82,6 @@ const projects = [
     github: "https://github.com/shii9/ReconNio",
     demo: null,
     accent: "#10B981",
-  },
-  {
-    title: "Phishing Analyzer",
-    description:
-      "A TypeScript-based security analysis tool that parses suspicious URLs, inspects SSL certificates, performs WHOIS queries, and identifies potential credential-harvesting login flows to detect phishing attempts.",
-    tags: ["TypeScript", "Phishing Analysis", "Threat Intel", "Web Security"],
-    icon: Shield,
-    status: "Completed",
-    statusColor: "text-emerald-400 bg-emerald-400/10 border-emerald-400/20",
-    github: "https://github.com/shii9/Phishing-Analyzer",
-    demo: null,
-    accent: "#EC4899",
-  },
-  {
-    title: "LSB Steganography",
-    description:
-      "A Python utility executing Least Significant Bit (LSB) steganography algorithms. Supports concealing and extracting encrypted payload files inside cover image, text, audio, and video media carriers.",
-    tags: ["Python", "Steganography", "Cryptography", "Data Concealment"],
-    icon: EyeOff,
-    status: "Completed",
-    statusColor: "text-emerald-400 bg-emerald-400/10 border-emerald-400/20",
-    github: "https://github.com/shii9/Steganography",
-    demo: null,
-    accent: "#F59E0B",
-  },
-  {
-    title: "Nio AI Assistant",
-    description:
-      "An advanced AI agent assistant engineered for SecOps tasks. Automates threat intelligence ingestion, queries common security APIs, drafts incident response plans, and summarizes security log anomalies.",
-    tags: ["Python", "AI Assistant", "SecOps Automation", "LLM Integration"],
-    icon: Cpu,
-    status: "Completed",
-    statusColor: "text-emerald-400 bg-emerald-400/10 border-emerald-400/20",
-    github: "https://github.com/shii9/Nio-AI-Assistant",
-    demo: null,
-    accent: "#8B5CF6",
   },
 ];
 
@@ -108,18 +115,23 @@ export default function Projects() {
                   />
 
                   {/* Top row */}
-                  <div className="flex items-start justify-between">
+                  <div className="flex items-start justify-between gap-2">
                     <div
                       className="w-11 h-11 rounded-xl flex items-center justify-center border border-foreground/10 flex-shrink-0"
                       style={{ backgroundColor: `${project.accent}20` }}
                     >
                       <Icon size={20} style={{ color: project.accent }} />
                     </div>
-                    <span
-                      className={`text-xs font-medium px-2.5 py-1 rounded-full border ${project.statusColor}`}
-                    >
-                      {project.status}
-                    </span>
+                    <div className="flex items-center gap-2 flex-wrap justify-end">
+                      <span className="text-xs font-medium px-2.5 py-1 rounded-full border border-foreground/10 text-muted-foreground bg-foreground/5">
+                        {project.date}
+                      </span>
+                      <span
+                        className={`text-xs font-medium px-2.5 py-1 rounded-full border ${project.statusColor}`}
+                      >
+                        {project.status}
+                      </span>
+                    </div>
                   </div>
 
                   <div className="flex-1">
@@ -148,7 +160,7 @@ export default function Projects() {
                     <a
                       href={project.github}
                       target="_blank"
-                      rel="noreferrer"
+                      rel="noopener noreferrer"
                       className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors duration-200"
                       data-testid={`link-github-${idx}`}
                     >
@@ -159,7 +171,7 @@ export default function Projects() {
                       <a
                         href={project.demo}
                         target="_blank"
-                        rel="noreferrer"
+                        rel="noopener noreferrer"
                         className="flex items-center gap-1.5 text-xs text-primary hover:text-primary/80 transition-colors duration-200 ml-auto"
                         data-testid={`link-demo-${idx}`}
                       >
@@ -181,7 +193,7 @@ export default function Projects() {
         <a
           href="https://github.com/shii9?tab=repositories"
           target="_blank"
-          rel="noreferrer"
+          rel="noopener noreferrer"
           data-testid="button-view-all-projects"
           className="inline-flex items-center justify-center gap-2 text-sm font-semibold text-white bg-primary/90 hover:bg-primary border border-primary/40 px-6 py-2.5 rounded-full transition-[background-color,box-shadow] duration-200 hover:shadow-[0_0_24px_rgba(255,107,53,0.35)] select-text"
         >

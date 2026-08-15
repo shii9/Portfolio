@@ -47,7 +47,7 @@ export default function Contact() {
             Let's Connect
           </h2>
           <p className="text-muted-foreground text-lg mb-14 leading-relaxed max-w-xl mx-auto text-left sm:text-justify">
-          Interested in cybersecurity, research, bug bounty or potential opportunities? Feel free to reach out. I'm always open to connecting with security researchers, professionals and learners.
+          Interested in cybersecurity research or potential opportunities? Feel free to reach out. I'm always open to connecting with security researchers, professionals and learners.
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12 text-left">
@@ -56,7 +56,7 @@ export default function Contact() {
                 key={social.name}
                 href={social.href}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 data-testid={`link-social-${social.name.toLowerCase()}`}
 {...fadeUpProps(i * 0.06)}
 className={`flex items-center gap-4 p-5 rounded-2xl border border-foreground/8 bg-card/50 text-muted-foreground transition-[background-color,border-color,box-shadow] duration-300 group ${social.bg}`}

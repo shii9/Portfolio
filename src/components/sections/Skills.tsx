@@ -49,31 +49,9 @@ const skillCategories = [
     borderHover: "hover:border-primary/40",
     skills: [
       { name: "Network Security", icon: Network },
-      { name: "Ethical Hacking", icon: Target },
-      { name: "Vulnerability Assessment", icon: Search },
-      { name: "Cryptography", icon: Lock },
-    ],
-  },
-  {
-    title: "Tools & Systems",
-    color: "from-amber-500/10 to-transparent",
-    borderHover: "hover:border-amber-400/40",
-    skills: [
-      { name: "Linux Administration", icon: SiLinux },
-      { name: "Kali Linux", icon: SiKalilinux },
-      { name: "Wireshark", icon: SiWireshark },
-      { name: "Python Scripting", icon: SiPython },
-    ],
-  },
-  {
-    title: "Active Learning",
-    color: "from-violet-500/10 to-transparent",
-    borderHover: "hover:border-violet-400/40",
-    skills: [
-      { name: "CTF Challenges", icon: TerminalSquare },
-      { name: "OSINT Techniques", icon: Search },
-      { name: "Malware Analysis", icon: Bug },
-      { name: "Wireless Security", icon: Wifi },
+      { name: "Application Security", icon: Shield },
+      { name: "Security Operations", icon: Eye },
+      { name: "Threat Detection", icon: Search },
     ],
   },
   {
@@ -81,10 +59,32 @@ const skillCategories = [
     color: "from-red-500/10 to-transparent",
     borderHover: "hover:border-red-400/40",
     skills: [
+      { name: "Ethical Hacking", icon: Target },
+      { name: "Penetration Testing", icon: Bug },
+      { name: "Vulnerability Research", icon: Search },
+      { name: "OSINT & Reconnaissance", icon: Globe },
+    ],
+  },
+  {
+    title: "Defensive Security",
+    color: "from-cyan-500/10 to-transparent",
+    borderHover: "hover:border-cyan-400/40",
+    skills: [
+      { name: "SOC Monitoring", icon: Eye },
+      { name: "NIDS & Intrusion Detection", icon: Network },
+      { name: "Incident Response", icon: Shield },
+      { name: "SIEM & Log Analysis", icon: TerminalSquare },
+    ],
+  },
+  {
+    title: "Active Learning",
+    color: "from-violet-500/10 to-transparent",
+    borderHover: "hover:border-violet-400/40",
+    skills: [
+      { name: "Aspiring SOC L1", icon: TerminalSquare },
       { name: "Penetration Testing", icon: Target },
-      { name: "Exploit Development", icon: Bug },
-      { name: "Social Engineering", icon: Eye },
-      { name: "Red Teaming", icon: Shield },
+      { name: "Network Traffic Analysis", icon: Network },
+      { name: "Security Research", icon: Code },
     ],
   },
 ];
