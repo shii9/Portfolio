@@ -44,6 +44,18 @@ const researchData = [
 
 const writeupsData = [
   {
+    type: "Lab Write-up",
+    role: "Splunk SOC Home Lab: Centralized Windows & Linux Security Monitoring",
+    company: "GitHub / Lab Setup",
+    date: "Aug 2026",
+    link: "https://github.com/shii9/SOC_Lab_Setup_Splunk",
+    highlight: "Published",
+    icon: FileText,
+    description:
+      "A multi-OS Security Operations Center (SOC) lab write-up documenting centralized log ingestion, security telemetry forwarding (Sysmon, Windows Event Logs, Linux auth/auditd), index segregation, SPL detection engineering for brute-force & privilege escalation, and incident response workflows using Splunk Enterprise 10.4.2 and Splunk Universal Forwarders.",
+    tags: ["Splunk Enterprise", "SIEM", "Sysmon", "SOC Home Lab", "Detection Engineering", "SPL", "Log Analysis"],
+  },
+  {
     type: "Write-up",
     role: "curl: The Complete Reference (Beginner to Advanced)",
     company: "GitHub",
@@ -268,7 +280,7 @@ export default function Research() {
                   <Icon size={20} />
                 </div>
 
-<motion.div className="bg-card/50 border border-foreground/8 rounded-2xl p-5 md:p-6 hover:border-primary/25 transition-[border-color,box-shadow,opacity] duration-300 group">
+                <motion.div className="bg-card/50 border border-foreground/8 rounded-2xl p-5 md:p-6 hover:border-primary/25 transition-[border-color,box-shadow,opacity] duration-300 group">
                   {/* Category tag up top */}
                   <div className="mb-2">
                     <span className="text-[11px] font-bold uppercase tracking-wider text-primary/90 bg-primary/10 px-2.5 py-0.5 rounded-md border border-primary/20 inline-block">

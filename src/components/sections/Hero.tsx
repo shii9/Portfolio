@@ -297,9 +297,8 @@ export default function Hero() {
               </h3>
               {card.lines.length === 1 ? (
                 <p
-                  className={`text-muted-foreground text-sm leading-relaxed border-l-2 border-primary/40 pl-4${
-                    card.justify ? " text-left sm:text-justify" : ""
-                  }`}
+                  className={`text-muted-foreground text-sm leading-relaxed border-l-2 border-primary/40 pl-4${card.justify ? " text-left sm:text-justify" : ""
+                    }`}
                 >
                   {card.lines[0]}
                 </p>

@@ -95,95 +95,95 @@ export default function Projects() {
 
       {/* Projects Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-{projects.map((project, idx) => {
-            const Icon = project.icon;
-            return (
-              <motion.div
-                key={project.title}
-                {...staggerItemProps(idx)}
-                className="h-full"
+        {projects.map((project, idx) => {
+          const Icon = project.icon;
+          return (
+            <motion.div
+              key={project.title}
+              {...staggerItemProps(idx)}
+              className="h-full"
+            >
+              <div
+                className="h-full bg-card/60 backdrop-blur-sm border border-foreground/8 rounded-2xl p-6 flex flex-col gap-4 hover:border-foreground/15 transition-[border-color,box-shadow,opacity] duration-300 group relative overflow-hidden"
               >
+                {/* Accent glow on hover */}
                 <div
-                  className="h-full bg-card/60 backdrop-blur-sm border border-foreground/8 rounded-2xl p-6 flex flex-col gap-4 hover:border-foreground/15 transition-[border-color,box-shadow,opacity] duration-300 group relative overflow-hidden"
-                >
-                  {/* Accent glow on hover */}
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl pointer-events-none"
+                  style={{
+                    background: `radial-gradient(circle at 50% 0%, ${project.accent}18 0%, transparent 60%)`,
+                  }}
+                />
+
+                {/* Top row */}
+                <div className="flex items-start justify-between gap-2">
                   <div
-                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl pointer-events-none"
-                    style={{
-                      background: `radial-gradient(circle at 50% 0%, ${project.accent}18 0%, transparent 60%)`,
-                    }}
-                  />
-
-                  {/* Top row */}
-                  <div className="flex items-start justify-between gap-2">
-                    <div
-                      className="w-11 h-11 rounded-xl flex items-center justify-center border border-foreground/10 flex-shrink-0"
-                      style={{ backgroundColor: `${project.accent}20` }}
+                    className="w-11 h-11 rounded-xl flex items-center justify-center border border-foreground/10 flex-shrink-0"
+                    style={{ backgroundColor: `${project.accent}20` }}
+                  >
+                    <Icon size={20} style={{ color: project.accent }} />
+                  </div>
+                  <div className="flex items-center gap-2 flex-wrap justify-end">
+                    <span className="text-xs font-medium px-2.5 py-1 rounded-full border border-foreground/10 text-muted-foreground bg-foreground/5">
+                      {project.date}
+                    </span>
+                    <span
+                      className={`text-xs font-medium px-2.5 py-1 rounded-full border ${project.statusColor}`}
                     >
-                      <Icon size={20} style={{ color: project.accent }} />
-                    </div>
-                    <div className="flex items-center gap-2 flex-wrap justify-end">
-                      <span className="text-xs font-medium px-2.5 py-1 rounded-full border border-foreground/10 text-muted-foreground bg-foreground/5">
-                        {project.date}
-                      </span>
-                      <span
-                        className={`text-xs font-medium px-2.5 py-1 rounded-full border ${project.statusColor}`}
-                      >
-                        {project.status}
-                      </span>
-                    </div>
+                      {project.status}
+                    </span>
                   </div>
+                </div>
 
-                  <div className="flex-1">
-                    <h3 className="text-foreground font-bold text-base mb-2 group-hover:text-primary transition-colors duration-200 leading-snug">
-                      {project.title}
-                    </h3>
-                    <p className="text-muted-foreground text-sm leading-relaxed">
-                      {project.description}
-                    </p>
-                  </div>
+                <div className="flex-1">
+                  <h3 className="text-foreground font-bold text-base mb-2 group-hover:text-primary transition-colors duration-200 leading-snug">
+                    {project.title}
+                  </h3>
+                  <p className="text-muted-foreground text-sm leading-relaxed">
+                    {project.description}
+                  </p>
+                </div>
 
-                  {/* Tags */}
-                  <div className="flex flex-wrap gap-1.5">
-                    {project.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-xs px-2.5 py-0.5 rounded-full bg-foreground/5 border border-foreground/8 text-foreground/60"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
+                {/* Tags */}
+                <div className="flex flex-wrap gap-1.5">
+                  {project.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="text-xs px-2.5 py-0.5 rounded-full bg-foreground/5 border border-foreground/8 text-foreground/60"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
 
-                  {/* Links */}
-                  <div className="flex items-center gap-3 pt-4 mt-auto border-t border-foreground/10">
+                {/* Links */}
+                <div className="flex items-center gap-3 pt-4 mt-auto border-t border-foreground/10">
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors duration-200"
+                    data-testid={`link-github-${idx}`}
+                  >
+                    <Github size={14} />
+                    <span>Source Code</span>
+                  </a>
+                  {project.demo && (
                     <a
-                      href={project.github}
+                      href={project.demo}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors duration-200"
-                      data-testid={`link-github-${idx}`}
+                      className="flex items-center gap-1.5 text-xs text-primary hover:text-primary/80 transition-colors duration-200 ml-auto"
+                      data-testid={`link-demo-${idx}`}
                     >
-                      <Github size={14} />
-                      <span>Source Code</span>
+                      <ExternalLink size={14} />
+                      <span>View Live</span>
                     </a>
-                    {project.demo && (
-                      <a
-                        href={project.demo}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-1.5 text-xs text-primary hover:text-primary/80 transition-colors duration-200 ml-auto"
-                        data-testid={`link-demo-${idx}`}
-                      >
-                        <ExternalLink size={14} />
-                        <span>View Live</span>
-                      </a>
-                    )}
-                  </div>
-</div>
-              </motion.div>
-            );
-          })}
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          );
+        })}
       </div>
 
       <motion.div
