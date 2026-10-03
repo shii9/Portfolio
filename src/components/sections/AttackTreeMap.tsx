@@ -213,7 +213,7 @@ export default function AttackTreeMap() {
                 key={phase.id}
                 type="button"
                 onClick={() => setActiveStepId(phase.id)}
-                className={`flex flex-col items-start p-3 rounded-xl border text-left transition-all duration-200 relative group overflow-hidden ${
+                className={`flex flex-col justify-between min-h-[96px] sm:min-h-[108px] p-4 rounded-xl border text-left transition-all duration-200 relative group overflow-hidden ${
                   isActive
                     ? "bg-primary/15 border-primary shadow-[0_0_18px_rgba(255,107,53,0.2)]"
                     : "bg-foreground/[0.02] border-foreground/8 hover:border-primary/35 hover:bg-foreground/[0.05]"
@@ -228,9 +228,9 @@ export default function AttackTreeMap() {
                   }`}
                 />
 
-                <div className="flex items-center justify-between w-full mb-1.5">
+                <div className="flex items-center justify-between w-full mb-3">
                   <span
-                    className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded transition-colors ${
+                    className={`text-[11px] font-mono font-bold px-2 py-0.5 rounded transition-colors ${
                       isActive
                         ? "bg-primary text-primary-foreground"
                         : "bg-foreground/10 text-muted-foreground group-hover:text-foreground"
@@ -239,19 +239,19 @@ export default function AttackTreeMap() {
                     Phase {phase.stepNum}
                   </span>
                   <div
-                    className={`w-6 h-6 rounded-md flex items-center justify-center transition-colors ${
+                    className={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors ${
                       isActive
                         ? "bg-primary/25 text-primary"
-                        : "text-muted-foreground/60 group-hover:text-primary"
+                        : "text-muted-foreground/60 group-hover:text-primary bg-foreground/5"
                     }`}
                   >
-                    <PhaseIcon size={14} />
+                    <PhaseIcon size={15} />
                   </div>
                 </div>
 
                 <span
-                  className={`text-xs font-semibold line-clamp-1 transition-colors ${
-                    isActive ? "text-primary" : "text-foreground/85 group-hover:text-foreground"
+                  className={`text-xs sm:text-[13px] font-bold line-clamp-2 leading-snug transition-colors ${
+                    isActive ? "text-primary" : "text-foreground/90 group-hover:text-foreground"
                   }`}
                 >
                   {phase.shortTitle}
