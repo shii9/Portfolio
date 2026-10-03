@@ -93,11 +93,11 @@ const simulationPhases: SimulationPhase[] = [
    ────────────────────────────────────────────────────────────────────── */
 
 export default function AttackTreeMap() {
-  const [activeStepId, setActiveStepId] = useState<string>("step-1");
+  const [activeStepId, setActiveStepId] = useState<string | null>(null);
 
-  const activeIndex = simulationPhases.findIndex((p) => p.id === activeStepId);
-  const activePhase = simulationPhases[activeIndex] || simulationPhases[0];
-  const ActiveIcon = activePhase.icon;
+  const activeIndex = activeStepId ? simulationPhases.findIndex((p) => p.id === activeStepId) : -1;
+  const activePhase = activeIndex >= 0 ? simulationPhases[activeIndex] : null;
+  const ActiveIcon = activePhase?.icon;
 
   const goToStep = (index: number) => {
     if (index >= 0 && index < simulationPhases.length) {
@@ -176,7 +176,7 @@ export default function AttackTreeMap() {
           </div>
 
           {/* 3 Architecture Boxes (Height matched to the 3 lines of text) */}
-          <div className="w-full sm:w-[260px] lg:w-[275px] shrink-0 flex flex-col justify-between self-stretch lg:self-auto py-0.5">
+          <div className="w-full sm:w-[260px] lg:w-[275px] shrink-0 flex flex-col justify-between self-stretch lg:self-auto py-0.5 lg:mr-16">
             {/* Box 1: Kali Linux (Attacker) */}
             <div className="w-full flex items-center justify-between gap-2 px-3 py-1.5 rounded-lg border border-red-500/25 bg-red-500/[0.04]">
               <div className="flex items-center gap-2 min-w-0">
@@ -265,7 +265,7 @@ export default function AttackTreeMap() {
             </div>
           </div>
           <span className="text-[10px] font-mono text-primary bg-primary/10 border border-primary/20 px-2.5 py-0.5 rounded-full">
-            Phase {activePhase.stepNum} of 06
+            {activePhase ? `Phase ${activePhase.stepNum} of 06` : "Click a Phase to Explore"}
           </span>
         </div>
 
@@ -279,7 +279,7 @@ export default function AttackTreeMap() {
               <button
                 key={phase.id}
                 type="button"
-                onClick={() => setActiveStepId(phase.id)}
+                onClick={() => setActiveStepId((prev) => (prev === phase.id ? null : phase.id))}
                 className={`flex flex-col justify-between min-h-[96px] sm:min-h-[108px] p-4 rounded-xl border text-left transition-all duration-200 relative group overflow-hidden ${
                   isActive
                     ? "bg-primary/15 border-primary shadow-[0_0_18px_rgba(255,107,53,0.2)]"
@@ -320,82 +320,84 @@ export default function AttackTreeMap() {
         </div>
       </div>
 
-      {/* ── Active Phase Details (Simple Starting Paragraph from Report) ── */}
-      <div className="mt-4 relative z-10">
-        <div className="rounded-xl border border-primary/35 bg-background/80 backdrop-blur-sm p-4 sm:p-5 pb-3 sm:pb-3.5 shadow-[0_4px_24px_rgba(255,107,53,0.08)] relative overflow-hidden transition-all duration-300">
-          {/* Subtle corner glow */}
-          <div className="absolute top-0 right-0 w-36 h-36 bg-primary/8 rounded-full blur-[60px] pointer-events-none" />
+      {/* ── Active Phase Details (only shown when a phase is selected) ── */}
+      {activePhase && (
+        <div className="mt-4 relative z-10">
+          <div className="rounded-xl border border-primary/35 bg-background/80 backdrop-blur-sm p-4 sm:p-5 pb-3 sm:pb-3.5 shadow-[0_4px_24px_rgba(255,107,53,0.08)] relative overflow-hidden transition-all duration-300">
+            {/* Subtle corner glow */}
+            <div className="absolute top-0 right-0 w-36 h-36 bg-primary/8 rounded-full blur-[60px] pointer-events-none" />
 
-          {/* Phase Header */}
-          <div className="flex items-center justify-between gap-3 pb-1.5 mb-2 relative z-10">
-            <div className="flex items-center gap-3 min-w-0">
-              <div className="w-9 h-9 rounded-lg bg-primary/15 border border-primary/30 flex items-center justify-center text-primary shrink-0">
-                <ActiveIcon size={18} />
-              </div>
-              <div className="min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-primary text-primary-foreground">
-                    Phase {activePhase.stepNum}
-                  </span>
-                  <h4 className="text-sm sm:text-base font-bold text-foreground truncate">
-                    {activePhase.title}
-                  </h4>
+            {/* Phase Header */}
+            <div className="flex items-center justify-between gap-3 pb-1.5 mb-2 relative z-10">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-9 h-9 rounded-lg bg-primary/15 border border-primary/30 flex items-center justify-center text-primary shrink-0">
+                  <ActiveIcon size={18} />
+                </div>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-primary text-primary-foreground">
+                      Phase {activePhase.stepNum}
+                    </span>
+                    <h4 className="text-sm sm:text-base font-bold text-foreground truncate">
+                      {activePhase.title}
+                    </h4>
+                  </div>
                 </div>
               </div>
+
+              <span className="text-[11px] font-mono text-muted-foreground shrink-0 hidden sm:block">
+                {activeIndex + 1} of {simulationPhases.length}
+              </span>
             </div>
 
-            <span className="text-[11px] font-mono text-muted-foreground shrink-0 hidden sm:block">
-              {activeIndex + 1} of {simulationPhases.length}
-            </span>
-          </div>
-
-          {/* Simple Short Starting Paragraph from PDF */}
-          <div className="relative z-10">
-            <p className="text-xs sm:text-sm text-foreground/90 leading-relaxed bg-foreground/[0.02] p-3.5 rounded-lg border border-foreground/6">
-              {activePhase.paragraph}
-            </p>
-          </div>
-
-          {/* Previous / Next Phase Navigation */}
-          <div className="mt-3 sm:mt-3.5 flex items-center justify-between text-xs relative z-10">
-            <div>
-              {activeIndex > 0 ? (
-                <button
-                  type="button"
-                  onClick={() => goToStep(activeIndex - 1)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-foreground/10 bg-foreground/5 hover:bg-foreground/10 text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  <ArrowLeft size={13} />
-                  <span>Previous Phase</span>
-                </button>
-              ) : (
-                <span className="text-[11px] text-muted-foreground/40">Start of Investigation</span>
-              )}
+            {/* Simple Short Starting Paragraph from PDF */}
+            <div className="relative z-10">
+              <p className="text-xs sm:text-sm text-foreground/90 leading-relaxed bg-foreground/[0.02] p-3.5 rounded-lg border border-foreground/6">
+                {activePhase.paragraph}
+              </p>
             </div>
 
-            <span className="text-[11px] text-muted-foreground/60 font-medium">
-              Click any phase above or use buttons to navigate
-            </span>
+            {/* Previous / Next Phase Navigation */}
+            <div className="mt-3 sm:mt-3.5 flex items-center justify-between text-xs relative z-10">
+              <div>
+                {activeIndex > 0 ? (
+                  <button
+                    type="button"
+                    onClick={() => goToStep(activeIndex - 1)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-foreground/10 bg-foreground/5 hover:bg-foreground/10 text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    <ArrowLeft size={13} />
+                    <span>Previous Phase</span>
+                  </button>
+                ) : (
+                  <span className="text-[11px] text-muted-foreground/40">Start of Investigation</span>
+                )}
+              </div>
 
-            <div>
-              {activeIndex < simulationPhases.length - 1 ? (
-                <button
-                  type="button"
-                  onClick={() => goToStep(activeIndex + 1)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-primary/30 bg-primary/10 hover:bg-primary/20 text-primary font-medium transition-colors"
-                >
-                  <span>Next Phase</span>
-                  <ArrowRight size={13} />
-                </button>
-              ) : (
-                <span className="text-[11px] text-emerald-400 font-semibold flex items-center gap-1">
-                  Investigation Complete
-                </span>
-              )}
+              <span className="text-[11px] text-muted-foreground/60 font-medium">
+                Click any phase above or use buttons to navigate
+              </span>
+
+              <div>
+                {activeIndex < simulationPhases.length - 1 ? (
+                  <button
+                    type="button"
+                    onClick={() => goToStep(activeIndex + 1)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-primary/30 bg-primary/10 hover:bg-primary/20 text-primary font-medium transition-colors"
+                  >
+                    <span>Next Phase</span>
+                    <ArrowRight size={13} />
+                  </button>
+                ) : (
+                  <span className="text-[11px] text-emerald-400 font-semibold flex items-center gap-1">
+                    Investigation Complete
+                  </span>
+                )}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* ── Tags Footer ── */}
       <div className="flex flex-wrap items-center gap-2 pt-6 mt-6 border-t border-foreground/8 relative z-10">
