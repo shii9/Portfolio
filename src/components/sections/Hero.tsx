@@ -258,7 +258,7 @@ export default function Hero() {
         <div className="h-1 w-16 bg-primary rounded-full mt-3 mb-6" />
 
         <div className="bg-card/50 border border-foreground/8 rounded-2xl p-6 md:p-8 w-full">
-          <div className="max-w-none text-muted-foreground text-sm leading-relaxed space-y-4 text-left sm:text-justify">
+          <div className="max-w-none text-muted-foreground text-sm leading-relaxed space-y-4 text-justify">
             <p>{aboutData.bio}</p>
             <p>
               I have designed and developed projects including a Network Intrusion Detection System (NIDS),
@@ -297,7 +297,7 @@ export default function Hero() {
               </h3>
               {card.lines.length === 1 ? (
                 <p
-                  className={`text-muted-foreground text-sm leading-relaxed border-l-2 border-primary/40 pl-4${card.justify ? " text-left sm:text-justify" : ""
+                  className={`text-muted-foreground text-sm leading-relaxed border-l-2 border-primary/40 pl-4${card.justify ? " text-justify" : ""
                     }`}
                 >
                   {card.lines[0]}

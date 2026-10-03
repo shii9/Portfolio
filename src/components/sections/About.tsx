@@ -30,7 +30,7 @@ export default function About() {
         className="max-w-3xl"
       >
         <motion.div {...hoverLift} className="bg-card/50 border border-foreground/8 rounded-2xl p-6 md:p-8 hover:border-primary/20 transition-[border-color,box-shadow] duration-300">
-          <div className="prose prose-invert max-w-none text-muted-foreground leading-relaxed space-y-4">
+          <div className="prose prose-invert max-w-none text-muted-foreground leading-relaxed space-y-4 text-justify">
             <p>{aboutData.bio}</p>
             <p>
               My research focuses on the intersection of cybersecurity and artificial intelligence — specifically
