@@ -232,17 +232,17 @@ const simulationSteps: SimulationStep[] = [
    ────────────────────────────────────────────────────────────────────── */
 
 const expandVariants = {
-  collapsed: { opacity: 0, height: 0, marginTop: 0 },
+  collapsed: { opacity: 0, height: 0, overflow: "hidden" as const },
   expanded: {
     opacity: 1,
     height: "auto",
-    marginTop: 8,
-    transition: { duration: 0.35, ease: [0.22, 1, 0.36, 1] },
+    overflow: "visible" as const,
+    transition: { duration: 0.35, ease: [0.22, 1, 0.36, 1], overflow: { delay: 0.35 } },
   },
   exit: {
     opacity: 0,
     height: 0,
-    marginTop: 0,
+    overflow: "hidden" as const,
     transition: { duration: 0.25, ease: [0.22, 1, 0.36, 1] },
   },
 };
@@ -322,9 +322,6 @@ export default function AttackTreeMap() {
             <span className="text-xs font-semibold text-emerald-400 bg-emerald-400/10 px-2.5 py-0.5 rounded-full border border-emerald-400/20 inline-flex items-center gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
               Simulation 1 Completed
-            </span>
-            <span className="text-xs text-muted-foreground bg-foreground/5 px-2.5 py-0.5 rounded-full border border-foreground/10">
-              Splunk Enterprise 10.x · Sysmon · DFIR
             </span>
           </div>
 
@@ -409,7 +406,7 @@ export default function AttackTreeMap() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
 
           {/* ── Left Column: Phase Nodes ── */}
-          <div className="lg:col-span-5 space-y-1.5">
+          <div className="lg:col-span-5 space-y-4">
             {simulationSteps.map((step, stepIdx) => {
               const isExpanded = expandedStepId === step.id;
               const StepIcon = step.icon;
@@ -423,11 +420,12 @@ export default function AttackTreeMap() {
               return (
                 <div key={step.id} className="relative">
                   {/* Vertical connector line between phase nodes */}
-                  {stepIdx < simulationSteps.length - 1 && (
+                  {stepIdx < simulationSteps.length - 1 && !isExpanded && (
                     <div
-                      className="absolute left-[19px] top-[44px] w-0.5 rounded-full transition-colors duration-500"
+                      className="absolute left-[19px] w-0.5 rounded-full"
                       style={{
-                        height: isExpanded ? "calc(100% - 20px)" : "16px",
+                        top: "48px",
+                        height: "12px",
                         background: completedRatio
                           ? "linear-gradient(to bottom, rgba(255,107,53,0.5), rgba(255,107,53,0.1))"
                           : "rgba(255,255,255,0.06)",
@@ -520,7 +518,7 @@ export default function AttackTreeMap() {
                         initial="collapsed"
                         animate="expanded"
                         exit="exit"
-                        className="ml-6 pl-5 space-y-1.5 relative overflow-hidden"
+                        className="ml-6 pl-5 pt-2 pb-1 space-y-1.5 relative"
                       >
                         {/* Vertical branch line */}
                         <div className="absolute left-0 top-0 bottom-0 w-px bg-gradient-to-b from-primary/40 via-primary/20 to-transparent" />
