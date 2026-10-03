@@ -166,7 +166,9 @@ export default function AttackTreeMap() {
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pt-1">
           <div className="flex-1 min-w-0 pr-0 lg:pr-4">
             <h3 className="text-xl sm:text-2xl md:text-[28px] lg:text-3xl font-serif font-bold text-foreground tracking-tight leading-snug">
-              SOC Threat Detection Analysis Simulation: Endpoint Compromise & Log Correlation
+              <span className="block">SOC Threat Detection</span>
+              <span className="block">with Analysis Simulation Investigation:</span>
+              <span className="block">Endpoint Compromise & Log Correlation</span>
             </h3>
           </div>
 
