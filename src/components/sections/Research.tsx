@@ -191,7 +191,10 @@ export default function Research() {
 
               <motion.div className="bg-card/50 border border-foreground/8 rounded-2xl p-5 md:p-6 hover:border-primary/25 transition-[border-color,box-shadow,opacity] duration-300 group">
                 {/* Category tag up top */}
-                <div className="mb-2">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-[11px] font-mono font-bold text-primary bg-primary/10 px-2.5 py-0.5 rounded-md border border-primary/25 inline-flex items-center">
+                    {String(idx + 1).padStart(2, "0")}
+                  </span>
                   <span className="text-[11px] font-bold uppercase tracking-wider text-primary/90 bg-primary/10 px-2.5 py-0.5 rounded-md border border-primary/20 inline-block">
                     {item.type}
                   </span>
@@ -282,7 +285,10 @@ export default function Research() {
 
                 <motion.div className="bg-card/50 border border-foreground/8 rounded-2xl p-5 md:p-6 hover:border-primary/25 transition-[border-color,box-shadow,opacity] duration-300 group">
                   {/* Category tag up top */}
-                  <div className="mb-2">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-[11px] font-mono font-bold text-primary bg-primary/10 px-2.5 py-0.5 rounded-md border border-primary/25 inline-flex items-center">
+                      {String(idx + 1).padStart(2, "0")}
+                    </span>
                     <span className="text-[11px] font-bold uppercase tracking-wider text-primary/90 bg-primary/10 px-2.5 py-0.5 rounded-md border border-primary/20 inline-block">
                       {item.type}
                     </span>
