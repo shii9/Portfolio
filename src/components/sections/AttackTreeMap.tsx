@@ -130,12 +130,12 @@ export default function AttackTreeMap() {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap shrink-0">
+          <div className="grid grid-cols-1 sm:flex sm:items-center gap-2 sm:gap-2.5 w-full sm:w-auto shrink-0">
             <a
               href={`${import.meta.env.BASE_URL}reports/Splunk-SOC-Investigation-(1)-Report.pdf`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold text-primary-foreground bg-primary hover:bg-primary/90 px-3.5 py-1.5 rounded-full transition-all duration-200 shadow-md hover:shadow-primary/25"
+              className="w-full sm:w-[155px] inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold text-primary-foreground bg-primary hover:bg-primary/90 px-3.5 py-2 sm:py-1.5 rounded-full transition-all duration-200 shadow-md hover:shadow-primary/25"
             >
               <FileText size={14} />
               <span>View Report (PDF)</span>
@@ -145,7 +145,7 @@ export default function AttackTreeMap() {
             <a
               href={`${import.meta.env.BASE_URL}reports/Splunk-SOC-Investigation-(1)-Report.docx`}
               download="Splunk-SOC-Investigation-(1)-Report.docx"
-              className="inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold text-foreground bg-foreground/5 hover:bg-foreground/10 border border-foreground/15 px-3 py-1.5 rounded-full transition-all duration-200"
+              className="w-full sm:w-[155px] inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold text-foreground bg-foreground/5 hover:bg-foreground/10 border border-foreground/15 px-3 py-2 sm:py-1.5 rounded-full transition-all duration-200"
               title="Download Original Investigation Report (.docx)"
             >
               <Download size={14} />
@@ -156,7 +156,7 @@ export default function AttackTreeMap() {
               href="https://github.com/shii9/SOC_Simulation/tree/main/SOC_Investigation_Simulation_1"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold text-foreground bg-foreground/5 hover:bg-foreground/10 border border-foreground/15 px-3 py-1.5 rounded-full transition-all duration-200"
+              className="w-full sm:w-[155px] inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold text-foreground bg-foreground/5 hover:bg-foreground/10 border border-foreground/15 px-3 py-2 sm:py-1.5 rounded-full transition-all duration-200"
             >
               <Github size={14} />
               <span>GitHub Repo</span>
@@ -250,21 +250,21 @@ export default function AttackTreeMap() {
 
       {/* ── Interactive Phase Selection (Upper Row Only) ── */}
       <div className="pt-6 relative z-10">
-        <div className="flex items-center justify-between gap-3 mb-3">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-primary/15 border border-primary/30 flex items-center justify-center text-primary">
+        <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-2.5 mb-3">
+          <div className="flex items-center gap-2 min-w-0">
+            <div className="w-7 h-7 rounded-lg bg-primary/15 border border-primary/30 flex items-center justify-center text-primary shrink-0">
               <Activity size={14} />
             </div>
-            <div>
-              <span className="text-xs sm:text-sm font-bold text-foreground uppercase tracking-wider">
-                Attack & Investigation Phases (01 To 06)
+            <div className="min-w-0">
+              <span className="text-xs sm:text-sm font-bold text-foreground uppercase tracking-wider block truncate">
+                Attack & Investigation Phases
               </span>
               <p className="text-[11px] text-muted-foreground hidden sm:block">
                 Click any phase to read the investigation summary
               </p>
             </div>
           </div>
-          <span className="text-[10px] font-mono text-primary bg-primary/10 border border-primary/20 px-2.5 py-0.5 rounded-full">
+          <span className="text-[10px] font-mono text-primary bg-primary/10 border border-primary/20 px-2.5 py-1 rounded-full whitespace-nowrap shrink-0">
             {activePhase ? `Phase ${activePhase.stepNum} of 06` : "Click a Phase to Explore"}
           </span>
         </div>
@@ -280,15 +280,15 @@ export default function AttackTreeMap() {
                 key={phase.id}
                 type="button"
                 onClick={() => setActiveStepId((prev) => (prev === phase.id ? null : phase.id))}
-                className={`flex flex-col justify-between min-h-[96px] sm:min-h-[108px] p-4 rounded-xl border text-left transition-all duration-200 relative group overflow-hidden ${
+                className={`flex flex-col justify-between min-h-[92px] sm:min-h-[108px] p-3 sm:p-4 rounded-xl border text-left transition-all duration-200 relative group overflow-hidden ${
                   isActive
                     ? "bg-primary/15 border-primary shadow-[0_0_18px_rgba(255,107,53,0.2)]"
                     : "bg-foreground/[0.02] border-foreground/8 hover:border-primary/35 hover:bg-foreground/[0.05]"
                 }`}
               >
-                <div className="flex items-center justify-between w-full mb-3">
+                <div className="flex items-center justify-between w-full mb-2 sm:mb-3">
                   <span
-                    className={`text-[11px] font-mono font-bold px-2 py-0.5 rounded transition-colors ${
+                    className={`text-[10px] sm:text-[11px] font-mono font-bold px-1.5 sm:px-2 py-0.5 rounded transition-colors ${
                       isActive
                         ? "bg-primary text-primary-foreground"
                         : "bg-foreground/10 text-muted-foreground group-hover:text-foreground"
@@ -297,13 +297,13 @@ export default function AttackTreeMap() {
                     Phase {phase.stepNum}
                   </span>
                   <div
-                    className={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors ${
+                    className={`w-6 h-6 sm:w-7 sm:h-7 rounded-lg flex items-center justify-center transition-colors ${
                       isActive
                         ? "bg-primary/25 text-primary"
                         : "text-muted-foreground/60 group-hover:text-primary bg-foreground/5"
                     }`}
                   >
-                    <PhaseIcon size={15} />
+                    <PhaseIcon size={14} className="sm:w-[15px] sm:h-[15px]" />
                   </div>
                 </div>
 
@@ -323,22 +323,22 @@ export default function AttackTreeMap() {
       {/* ── Active Phase Details (only shown when a phase is selected) ── */}
       {activePhase && (
         <div className="mt-4 relative z-10">
-          <div className="rounded-xl border border-primary/35 bg-background/80 backdrop-blur-sm p-4 sm:p-5 pb-3 sm:pb-3.5 shadow-[0_4px_24px_rgba(255,107,53,0.08)] relative overflow-hidden transition-all duration-300">
+          <div className="rounded-xl border border-primary/35 bg-background/80 backdrop-blur-sm p-3.5 sm:p-5 pb-3 sm:pb-3.5 shadow-[0_4px_24px_rgba(255,107,53,0.08)] relative overflow-hidden transition-all duration-300">
             {/* Subtle corner glow */}
             <div className="absolute top-0 right-0 w-36 h-36 bg-primary/8 rounded-full blur-[60px] pointer-events-none" />
 
             {/* Phase Header */}
             <div className="flex items-center justify-between gap-3 pb-1.5 mb-2 relative z-10">
-              <div className="flex items-center gap-3 min-w-0">
-                <div className="w-9 h-9 rounded-lg bg-primary/15 border border-primary/30 flex items-center justify-center text-primary shrink-0">
-                  <ActiveIcon size={18} />
+              <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-primary/15 border border-primary/30 flex items-center justify-center text-primary shrink-0">
+                  <ActiveIcon size={16} className="sm:w-[18px] sm:h-[18px]" />
                 </div>
                 <div className="min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-primary text-primary-foreground">
+                  <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-primary text-primary-foreground shrink-0">
                       Phase {activePhase.stepNum}
                     </span>
-                    <h4 className="text-sm sm:text-base font-bold text-foreground truncate">
+                    <h4 className="text-xs sm:text-base font-bold text-foreground truncate">
                       {activePhase.title}
                     </h4>
                   </div>
@@ -352,44 +352,44 @@ export default function AttackTreeMap() {
 
             {/* Simple Short Starting Paragraph from PDF */}
             <div className="relative z-10">
-              <p className="text-xs sm:text-sm text-foreground/90 leading-relaxed bg-foreground/[0.02] p-3.5 rounded-lg border border-foreground/6">
+              <p className="text-xs sm:text-sm text-foreground/90 leading-relaxed bg-foreground/[0.02] p-3 sm:p-3.5 rounded-lg border border-foreground/6">
                 {activePhase.paragraph}
               </p>
             </div>
 
             {/* Previous / Next Phase Navigation */}
-            <div className="mt-3 sm:mt-3.5 flex items-center justify-between text-xs relative z-10">
-              <div>
+            <div className="mt-3 sm:mt-3.5 flex items-center justify-between gap-2 text-xs relative z-10">
+              <div className="shrink-0">
                 {activeIndex > 0 ? (
                   <button
                     type="button"
                     onClick={() => goToStep(activeIndex - 1)}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-foreground/10 bg-foreground/5 hover:bg-foreground/10 text-muted-foreground hover:text-foreground transition-colors"
+                    className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg border border-foreground/10 bg-foreground/5 hover:bg-foreground/10 text-muted-foreground hover:text-foreground text-xs transition-colors"
                   >
                     <ArrowLeft size={13} />
                     <span>Previous Phase</span>
                   </button>
                 ) : (
-                  <span className="text-[11px] text-muted-foreground/40">Start of Investigation</span>
+                  <span className="text-[10px] sm:text-[11px] text-muted-foreground/40">Start of Investigation</span>
                 )}
               </div>
 
-              <span className="text-[11px] text-muted-foreground/60 font-medium">
+              <span className="text-[11px] text-muted-foreground/60 font-medium hidden md:inline-block text-center px-2">
                 Click any phase above or use buttons to navigate
               </span>
 
-              <div>
+              <div className="shrink-0">
                 {activeIndex < simulationPhases.length - 1 ? (
                   <button
                     type="button"
                     onClick={() => goToStep(activeIndex + 1)}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-primary/30 bg-primary/10 hover:bg-primary/20 text-primary font-medium transition-colors"
+                    className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg border border-primary/30 bg-primary/10 hover:bg-primary/20 text-primary font-medium text-xs transition-colors"
                   >
                     <span>Next Phase</span>
                     <ArrowRight size={13} />
                   </button>
                 ) : (
-                  <span className="text-[11px] text-emerald-400 font-semibold flex items-center gap-1">
+                  <span className="text-[10px] sm:text-[11px] text-emerald-400 font-semibold flex items-center gap-1">
                     Investigation Complete
                   </span>
                 )}
