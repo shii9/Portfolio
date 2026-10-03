@@ -333,7 +333,7 @@ export default function AttackTreeMap() {
           <div className="absolute top-0 right-0 w-36 h-36 bg-primary/8 rounded-full blur-[60px] pointer-events-none" />
 
           {/* Phase Header */}
-          <div className="flex items-center justify-between gap-3 pb-3 mb-3 border-b border-foreground/8 relative z-10">
+          <div className="flex items-center justify-between gap-3 pb-1.5 mb-2 relative z-10">
             <div className="flex items-center gap-3 min-w-0">
               <div className="w-9 h-9 rounded-lg bg-primary/15 border border-primary/30 flex items-center justify-center text-primary shrink-0">
                 <ActiveIcon size={18} />
