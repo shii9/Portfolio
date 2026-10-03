@@ -128,7 +128,7 @@ export default function AttackTreeMap() {
           </h3>
 
           <p className="text-xs sm:text-sm text-primary/80 font-medium mt-1.5">
-            Kali Linux (Attacker) <span className="text-muted-foreground/50">→</span> Windows 10 (Sysmon Target) <span className="text-muted-foreground/50">→</span> Windows 11 (Splunk SIEM)
+            Kali Linux (Attacker) <span className="text-muted-foreground/50">→</span> Windows 10 (Target) <span className="text-muted-foreground/50">→</span> Windows 11 (Splunk SIEM)
           </p>
         </div>
 
@@ -169,13 +169,15 @@ export default function AttackTreeMap() {
       </div>
 
       {/* ── Narrative Summary ── */}
-      <div className="py-4 text-xs sm:text-sm text-muted-foreground leading-relaxed relative z-10 border-b border-foreground/8">
+      <div className="py-4 text-xs sm:text-sm text-muted-foreground leading-relaxed relative z-10 border-b border-foreground/8 space-y-2.5">
         <p className="text-left sm:text-justify">
-          In this hands-on lab, I simulated an end-to-end endpoint attack scenario and investigated the resulting telemetry
-          in Splunk Enterprise. I walked through the entire intrusion process — executing a Meterpreter payload, performing
-          system discovery, creating persistent admin backdoors, downloading secondary tools using Windows certutil, and
-          testing credential access with Mimikatz. Using Sysmon and Windows Security event logs, I correlated the attack
-          activities into a unified timeline and built actionable detection searches in Splunk.
+          In this hands-on cybersecurity simulation, I designed and executed an end-to-end adversary attack scenario across an isolated enterprise lab consisting of <span className="text-foreground font-semibold">Kali Linux (Attacker)</span>, <span className="text-foreground font-semibold">Windows 10 (Target Endpoint)</span>, and <span className="text-foreground font-semibold">Windows 11 running Splunk Enterprise (Centralized SIEM)</span>. The primary objective was to generate realistic adversary activity, reconstruct the full forensic timeline, and engineer high-fidelity threat detection rules mapped to the MITRE ATT&CK framework.
+        </p>
+        <p className="text-left sm:text-justify">
+          Throughout the engagement, I walked through the complete intrusion lifecycle: delivering and executing a staged reverse HTTP Meterpreter payload, performing rapid host reconnaissance using native Windows discovery utilities (<code className="font-mono text-primary text-[11px]">whoami</code>, <code className="font-mono text-primary text-[11px]">systeminfo</code>), establishing persistent administrative backdoors through local account manipulation and SYSTEM-level scheduled tasks, abusing Living-off-the-Land binaries (<code className="font-mono text-primary text-[11px]">certutil.exe -urlcache</code>) for covert tool staging, and executing Mimikatz to inspect privileged LSASS authentication memory.
+        </p>
+        <p className="text-left sm:text-justify">
+          From the SOC defense perspective, I centralized and analyzed endpoint telemetry collected by <span className="text-foreground font-semibold">Microsoft Sysmon</span> and <span className="text-foreground font-semibold">Windows Security audit logs</span>. By correlating parent-child process lineage, outbound network sockets, and unique Sysmon <code className="font-mono text-primary text-[11px]">ProcessGuid</code> tokens, I transformed raw log data into an uninterrupted attack timeline, validated threat detection queries in Splunk, and authored production Sigma rules to detect and alert on suspicious adversary behaviors.
         </p>
       </div>
 
@@ -188,7 +190,7 @@ export default function AttackTreeMap() {
             </div>
             <div>
               <span className="text-xs sm:text-sm font-bold text-foreground uppercase tracking-wider">
-                Attack & Investigation Phases (01 → 06)
+                Attack & Investigation Phases (01 To 06)
               </span>
               <p className="text-[11px] text-muted-foreground hidden sm:block">
                 Click any phase to read the investigation summary
@@ -202,7 +204,7 @@ export default function AttackTreeMap() {
 
         {/* 6 Phases Across the Row */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 pt-1">
-          {simulationPhases.map((phase, pIdx) => {
+          {simulationPhases.map((phase) => {
             const isActive = activeStepId === phase.id;
             const PhaseIcon = phase.icon;
 
@@ -254,11 +256,6 @@ export default function AttackTreeMap() {
                 >
                   {phase.shortTitle}
                 </span>
-
-                <div className="mt-1 flex items-center gap-1 text-[10px] text-muted-foreground/60">
-                  <span className={`w-1.5 h-1.5 rounded-full ${isActive ? "bg-emerald-400" : "bg-foreground/20"}`} />
-                  <span>{isActive ? "Selected" : `Step ${pIdx + 1}`}</span>
-                </div>
               </button>
             );
           })}
