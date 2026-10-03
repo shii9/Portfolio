@@ -33,15 +33,14 @@ The site features a cyberpunk-inspired aesthetic with animated 3D elements, a cu
 
 | Feature | Details |
 |---|---|
-| 🎨 **Cyberpunk Dark Theme** | Custom design system with neon-green primary accent, glassmorphism cards |
-| 🌀 **Animated Hero** | 3D CyberShield, hex grid background, word-by-word headline reveal |
-| 🖱️ **Custom Cursor** | Glow effect + crack particle trail on click |
-| 📊 **Animated Stats** | CountUp numbers that animate on scroll into view |
-| 🗂️ **Sections** | Hero · Skills · Projects & Simulations · Research · Experience · Achievements · Contact |
-| 📱 **Fully Responsive** | Mobile-first layout, works on all screen sizes |
-| ⚡ **Performance** | Code-split chunks, gzip <100 kB per bundle, fast Vite build |
-| ♿ **Accessible** | Respects `prefers-reduced-motion`, semantic HTML |
-| 🔒 **Security Headers** | `public/_headers` with CSP, HSTS, X-Frame-Options |
+| 🎨 **Cybersecurity Dark Theme** | Curated dark aesthetic with warm cyber-orange primary accents and emerald status badges |
+| 🌀 **Animated Hero** | Dynamic background grid, headline reveals, and rotating security role badges |
+| 🖱️ **Custom Cursor & Interactions** | Glow effect, smooth hover micro-animations, and scroll indicator |
+| 📊 **Animated Stats** | CountUp numbers that animate into view upon scrolling |
+| 🗂️ **Interactive Investigation Map** | 6-phase expandable SOC attack pipeline with instant narrative breakdowns |
+| 📱 **Mobile & Desktop Optimized** | Fully responsive layout across all device viewports |
+| ⚡ **Performance** | Code-split chunks with Vite 6, fast load times, and gzip optimization |
+| ♿ **Accessible & Secure** | Semantic HTML, respects motion preferences, and configured security headers |
 
 ---
 
@@ -50,11 +49,11 @@ The site features a cyberpunk-inspired aesthetic with animated 3D elements, a cu
 - **Hero** — Name, rotating role badge (Security Researcher · Bug Hunter · Pen Tester · …), education, location, and social links
 - **Skills** — Grouped skill cards: Security tools, programming languages, frameworks, platforms
 - **Projects & Simulations** — Flagship threat simulations and security development tools:
-  - **Flagship SOC Threat Simulation & DFIR** — Complete endpoint compromise with an interactive **Cyber Kill Chain Map**, expandable telemetry breakdown (Sysmon / Windows Security), Splunk SPL hunt queries, and full investigation reports (`.pdf` / `.docx`)
+  - **Flagship SOC Threat Simulation & DFIR** — End-to-end adversary simulation featuring a 3-node lab architecture, 6-phase investigation pipeline, Splunk SPL detection queries, and original reports (`.pdf` / `.docx`)
   - **Security Tools & Software Applications** — Open-source tools (*EchoMe, DorkNio, UrlShine, Nio AI Assistant, LSB Steganography, ReconNio*)
-- **Research & Write-ups** — Academic papers and published technical write-ups:
-  - **Research Experience** — Academic publications on Explainable AI (XAI) + NIDS and User Cyber Risk Modeling
-  - **Write-ups** — In-depth lab guides (*Splunk SOC Home Lab*, *curl*, *FFUF*)
+- **Research & Write-ups** — Numbered academic papers and published technical write-ups:
+  - **Research Experience (01 - 02)** — Peer-reviewed/academic papers on Explainable AI (XAI) + NIDS and User Cyber Risk Modeling
+  - **Write-ups (01 - 03)** — In-depth lab guides (*Splunk SOC Home Lab*, *curl*, *FFUF*)
 - **Experience** — Work history, research positions, and internships in interactive timeline format
 - **Achievements** — CTF wins, certifications, and academic milestones
 - **Contact** — Interactive contact form with verified social media links
@@ -63,16 +62,20 @@ The site features a cyberpunk-inspired aesthetic with animated 3D elements, a cu
 
 ## 🔬 Featured SOC Threat Simulation (Projects Section)
 
-### 🛡️ SOC Threat Detection Analysis Simulation 1: Endpoint Compromise & Log Correlation
+### 🛡️ SOC Threat Detection Analysis Simulation: Endpoint Compromise & Log Correlation
 * **Simulation Repository:** [shii9/SOC_Simulation (Simulation 1)](https://github.com/shii9/SOC_Simulation/tree/main/SOC_Investigation_Simulation_1)
-* **Investigation Report:** Available on the portfolio in **PDF** (interactive viewing) and **DOCX** (downloadable) format
-* **Architecture:** Kali Linux (Attacker) → Windows 10 (Sysmon Endpoint) → Windows 11 (Splunk Enterprise SIEM)
-* **Scope & Attack Lifecycle:**
-  1. *Execution & C2:* Meterpreter `reverse_http` payload staging and listener callback (Sysmon EID 1 & 3, Win Event 4688)
-  2. *Discovery:* Host reconnaissance (`whoami`, `hostname`, `systeminfo`)
-  3. *Persistence & PrivEsc:* Backdoor local administrator account creation and SYSTEM-level Scheduled Task execution (Win Event 4698 / 4720)
-  4. *Tool Staging & Credential Prep:* Ingress tool transfer via LOLBIN `certutil.exe` pulling Mimikatz disguised as `GetClaude.exe`, invoking `privilege::debug` (MITRE T1003)
-  5. *SIEM Correlation & Threat Hunting:* Splunk SPL correlation across `ProcessGuid`, custom Sigma detection rules, and MITRE ATT&CK Navigator layer mapping
+* **Investigation Reports:** Direct on-site viewing via **PDF** and downloadable **DOCX** format
+* **Lab Architecture:**
+  - `Kali Linux (192.168.110.141)` — Offense / Attacker Platform (Metasploit C2)
+  - `Windows 10 (192.168.110.140)` — Target / Victim Endpoint (Sysmon & Security Audit)
+  - `Windows 11 (192.168.110.142)` — Defense / Splunk Enterprise SIEM
+* **6-Phase Interactive Attack Lifecycle:**
+  1. **Phase 01: Initial Access & Command and Control (C2)** — Meterpreter reverse HTTP callback via `FreeClude.exe` (Sysmon Event 1 & 3)
+  2. **Phase 02: System Discovery & Host Fingerprinting** — Reconnaissance commands (`whoami`, `hostname`, `systeminfo`)
+  3. **Phase 03: Persistence & Privilege Escalation** — Backdoor user `ClaudeBackdoor` added to local Administrators + elevated Scheduled Task `GetClaudeBackdoor` (Win Event 4698 / 4720)
+  4. **Phase 04: Tool Transfer via certutil (LOLBIN)** — Living-off-the-land payload download disguising Mimikatz as `GetClaude.exe`
+  5. **Phase 05: Credential Access & Memory Inspection (Mimikatz)** — Enabling `SeDebugPrivilege` targeting LSASS memory handles
+  6. **Phase 06: Splunk SIEM Correlation & Sigma Detection Engineering** — Process lineage tracking via Sysmon `ProcessGuid`, SPL hunting queries, and authored Sigma rules
 
 ---
 
@@ -87,18 +90,18 @@ The site features a cyberpunk-inspired aesthetic with animated 3D elements, a cu
 | **Routing** | [Wouter](https://github.com/molefrog/wouter) (lightweight React router) |
 | **UI Components** | [Radix UI](https://www.radix-ui.com/) primitives |
 | **Icons** | [Lucide React](https://lucide.dev/) + [React Icons](https://react-icons.github.io/react-icons/) |
-| **Theme** | [next-themes](https://github.com/pacocoursey/next-themes) (dark mode) |
-| **Deployment** | [GitHub Pages](https://pages.github.com/) via [gh-pages](https://github.com/tschaub/gh-pages) |
+| **Theme** | Custom Dark Theme with Tailored Cybersecurity Color Palettes |
+| **Deployment** | [GitHub Pages](https://pages.github.com/) via GitHub Actions |
 
 ---
 
 ## 🎨 Design Highlights
 
-- **Color palette**: Deep dark background (`#0a0a0f`) with a neon cyan-green primary (`hsl(165 80% 45%)`)
-- **Typography**: Serif headings (Playfair Display) + sans-serif body (Inter)
-- **Glassmorphism**: Semi-transparent cards with `backdrop-blur` for depth
-- **3D Elements**: SVG-based animated CyberShield and hex grid patterns
-- **Micro-animations**: Every section uses staggered Framer Motion reveals
+- **Color palette**: Deep cybersecurity dark canvas with tailored cyber-orange (`#FF6B35`) accent and emerald indicator badges
+- **Typography**: Editorial serif headings combined with crisp monospace tags and sans-serif body typography
+- **Glassmorphism**: Semi-transparent card surfaces with `backdrop-blur` for clean visual hierarchy
+- **Interactive Phase Explorer**: Click-to-inspect 6-phase attack reconstruction with dynamic Prev/Next phase walkthroughs
+- **Responsive Architecture Flow**: Visual 3-node system architecture diagram with mobile-optimized touch controls
 
 ---
 
