@@ -112,9 +112,10 @@ export default function AttackTreeMap() {
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-emerald-500/5 rounded-full blur-[130px] pointer-events-none -ml-20 -mb-20" />
 
       {/* ── Top Header ── */}
-      <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6 pb-6 border-b border-foreground/10 relative z-10">
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-2.5 flex-wrap">
+      <div className="pb-6 border-b border-foreground/10 relative z-10 space-y-4">
+        {/* Row 1: Badges on left, Action Buttons on right */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-2 flex-wrap">
             <span className="text-[11px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-2.5 py-0.5 rounded-md border border-primary/25 inline-flex items-center gap-1.5">
               <ShieldAlert size={13} />
               Hands-on SOC Simulation
@@ -125,33 +126,26 @@ export default function AttackTreeMap() {
             </span>
           </div>
 
-          <h3 className="text-xl sm:text-2xl md:text-3xl font-serif font-bold text-foreground tracking-tight leading-snug">
-            SOC Threat Detection Analysis Simulation: Endpoint Compromise & Log Correlation
-          </h3>
-        </div>
-
-        {/* Action Buttons & Architecture Flow (Underneath the buttons) */}
-        <div className="flex flex-col items-start lg:items-end gap-3.5 shrink-0">
           {/* Action Buttons */}
-          <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap">
+          <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap shrink-0">
             <a
               href={`${import.meta.env.BASE_URL}reports/Splunk-SOC-Investigation-(1)-Report.pdf`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold text-primary-foreground bg-primary hover:bg-primary/90 px-4 py-2 rounded-full transition-all duration-200 shadow-md hover:shadow-primary/25"
+              className="inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold text-primary-foreground bg-primary hover:bg-primary/90 px-3.5 py-1.5 rounded-full transition-all duration-200 shadow-md hover:shadow-primary/25"
             >
-              <FileText size={15} />
+              <FileText size={14} />
               <span>View Report (PDF)</span>
-              <ExternalLink size={12} />
+              <ExternalLink size={11} />
             </a>
 
             <a
               href={`${import.meta.env.BASE_URL}reports/Splunk-SOC-Investigation-(1)-Report.docx`}
               download="Splunk-SOC-Investigation-(1)-Report.docx"
-              className="inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold text-foreground bg-foreground/5 hover:bg-foreground/10 border border-foreground/15 px-3.5 py-2 rounded-full transition-all duration-200"
+              className="inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold text-foreground bg-foreground/5 hover:bg-foreground/10 border border-foreground/15 px-3 py-1.5 rounded-full transition-all duration-200"
               title="Download Original Investigation Report (.docx)"
             >
-              <Download size={15} />
+              <Download size={14} />
               <span>Download (.docx)</span>
             </a>
 
@@ -159,69 +153,76 @@ export default function AttackTreeMap() {
               href="https://github.com/shii9/SOC_Simulation/tree/main/SOC_Investigation_Simulation_1"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold text-foreground bg-foreground/5 hover:bg-foreground/10 border border-foreground/15 px-3.5 py-2 rounded-full transition-all duration-200"
+              className="inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold text-foreground bg-foreground/5 hover:bg-foreground/10 border border-foreground/15 px-3 py-1.5 rounded-full transition-all duration-200"
             >
-              <Github size={15} />
+              <Github size={14} />
               <span>GitHub Repo</span>
-              <ExternalLink size={12} />
+              <ExternalLink size={11} />
             </a>
           </div>
+        </div>
 
-          {/* ── Architecture Flow (Under the buttons) ── */}
-          <div className="w-full sm:w-[280px] lg:w-[300px] flex flex-col items-center pt-1">
+        {/* Row 2: 3-line Title on Left, 3 Architecture Boxes on Right (Organized Height Match) */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pt-1">
+          <div className="flex-1 min-w-0 pr-0 lg:pr-4">
+            <h3 className="text-xl sm:text-2xl md:text-[28px] lg:text-3xl font-serif font-bold text-foreground tracking-tight leading-snug">
+              SOC Threat Detection Analysis Simulation: Endpoint Compromise & Log Correlation
+            </h3>
+          </div>
+
+          {/* 3 Architecture Boxes (Height matched to the 3 lines of text) */}
+          <div className="w-full sm:w-[260px] lg:w-[275px] shrink-0 flex flex-col justify-between self-stretch lg:self-auto py-0.5">
             {/* Box 1: Kali Linux (Attacker) */}
-            <div className="w-full flex items-center justify-between gap-2.5 px-3.5 py-2 rounded-xl border border-red-500/25 bg-red-500/[0.04] shadow-sm">
-              <div className="flex items-center gap-2.5 min-w-0">
-                <div className="w-7 h-7 rounded-lg bg-red-500/15 border border-red-500/30 flex items-center justify-center text-red-400 shrink-0">
-                  <Terminal size={14} />
+            <div className="w-full flex items-center justify-between gap-2 px-3 py-1.5 rounded-lg border border-red-500/25 bg-red-500/[0.04]">
+              <div className="flex items-center gap-2 min-w-0">
+                <div className="w-5 h-5 rounded-md bg-red-500/15 border border-red-500/30 flex items-center justify-center text-red-400 shrink-0">
+                  <Terminal size={11} />
                 </div>
-                <span className="text-xs sm:text-sm font-bold text-foreground truncate">
+                <span className="text-xs font-bold text-foreground truncate">
                   Kali Linux
                 </span>
               </div>
-              <span className="text-[10px] font-mono font-bold text-red-400 bg-red-400/10 border border-red-400/25 px-2 py-0.5 rounded-md shrink-0">
+              <span className="text-[10px] font-mono font-bold text-red-400 bg-red-400/10 border border-red-400/25 px-1.5 py-0.5 rounded shrink-0">
                 Attacker
               </span>
             </div>
 
             {/* Vertical Connector Line 1 */}
-            <div className="flex flex-col items-center my-1 text-primary/70">
-              <div className="w-px h-3 bg-gradient-to-b from-primary/60 to-primary/30" />
-              <ChevronDown size={13} className="-mt-1 text-primary" />
+            <div className="flex items-center justify-center text-primary/70 -my-0.5">
+              <ChevronDown size={11} className="text-primary/70" />
             </div>
 
             {/* Box 2: Windows 10 (Target) */}
-            <div className="w-full flex items-center justify-between gap-2.5 px-3.5 py-2 rounded-xl border border-amber-500/25 bg-amber-500/[0.04] shadow-sm">
-              <div className="flex items-center gap-2.5 min-w-0">
-                <div className="w-7 h-7 rounded-lg bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
-                  <Cpu size={14} />
+            <div className="w-full flex items-center justify-between gap-2 px-3 py-1.5 rounded-lg border border-amber-500/25 bg-amber-500/[0.04]">
+              <div className="flex items-center gap-2 min-w-0">
+                <div className="w-5 h-5 rounded-md bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
+                  <Cpu size={11} />
                 </div>
-                <span className="text-xs sm:text-sm font-bold text-foreground truncate">
+                <span className="text-xs font-bold text-foreground truncate">
                   Windows 10
                 </span>
               </div>
-              <span className="text-[10px] font-mono font-bold text-amber-400 bg-amber-400/10 border border-amber-400/25 px-2 py-0.5 rounded-md shrink-0">
+              <span className="text-[10px] font-mono font-bold text-amber-400 bg-amber-400/10 border border-amber-400/25 px-1.5 py-0.5 rounded shrink-0">
                 Target
               </span>
             </div>
 
             {/* Vertical Connector Line 2 */}
-            <div className="flex flex-col items-center my-1 text-primary/70">
-              <div className="w-px h-3 bg-gradient-to-b from-primary/60 to-primary/30" />
-              <ChevronDown size={13} className="-mt-1 text-primary" />
+            <div className="flex items-center justify-center text-primary/70 -my-0.5">
+              <ChevronDown size={11} className="text-primary/70" />
             </div>
 
             {/* Box 3: Windows 11 (Splunk SIEM) */}
-            <div className="w-full flex items-center justify-between gap-2.5 px-3.5 py-2 rounded-xl border border-emerald-500/25 bg-emerald-500/[0.04] shadow-sm">
-              <div className="flex items-center gap-2.5 min-w-0">
-                <div className="w-7 h-7 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
-                  <ShieldCheck size={14} />
+            <div className="w-full flex items-center justify-between gap-2 px-3 py-1.5 rounded-lg border border-emerald-500/25 bg-emerald-500/[0.04]">
+              <div className="flex items-center gap-2 min-w-0">
+                <div className="w-5 h-5 rounded-md bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
+                  <ShieldCheck size={11} />
                 </div>
-                <span className="text-xs sm:text-sm font-bold text-foreground truncate">
+                <span className="text-xs font-bold text-foreground truncate">
                   Windows 11
                 </span>
               </div>
-              <span className="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-400/10 border border-emerald-400/25 px-2 py-0.5 rounded-md shrink-0">
+              <span className="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-400/10 border border-emerald-400/25 px-1.5 py-0.5 rounded shrink-0">
                 Splunk SIEM
               </span>
             </div>
