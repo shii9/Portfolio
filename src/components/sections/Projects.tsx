@@ -92,7 +92,7 @@ export default function Projects() {
       <GlowBlob position="right" />
 
       {/* Section Header */}
-      <SectionHeading eyebrow="What I've Built" title="Projects" />
+      <SectionHeading eyebrow="What I've Built" title="Projects & Simulations" />
 
       {/* Projects Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
