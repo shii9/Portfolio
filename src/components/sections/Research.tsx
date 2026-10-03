@@ -117,7 +117,7 @@ function ResearchCard({
         </div>
       </div>
 
-      <div className="text-muted-foreground leading-relaxed mb-4 text-sm relative z-10 flex-1 text-left sm:text-justify space-y-2">
+      <div className="text-muted-foreground leading-relaxed mb-4 text-sm relative z-10 flex-1 text-justify space-y-2">
         {item.description.split('\n\n').map((paragraph, i) => (
           <p key={i}>{paragraph}</p>
         ))}
@@ -219,7 +219,7 @@ export default function Research() {
                   </div>
                 </div>
 
-                <p className="text-muted-foreground leading-relaxed mb-4 text-sm text-left sm:text-justify">{item.description}</p>
+                <p className="text-muted-foreground leading-relaxed mb-4 text-sm text-justify">{item.description}</p>
 
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div className="flex flex-wrap gap-2">
@@ -313,7 +313,7 @@ export default function Research() {
                     </div>
                   </div>
 
-                  <p className="text-muted-foreground leading-relaxed mb-4 text-sm text-left sm:text-justify">{item.description}</p>
+                  <p className="text-muted-foreground leading-relaxed mb-4 text-sm text-justify">{item.description}</p>
 
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div className="flex flex-wrap gap-2">

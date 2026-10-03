@@ -237,13 +237,13 @@ export default function AttackTreeMap() {
 
       {/* ── Narrative Summary ── */}
       <div className="py-4 text-xs sm:text-sm text-muted-foreground leading-relaxed relative z-10 border-b border-foreground/8 space-y-3">
-        <p className="text-left sm:text-justify">
+        <p className="text-justify">
           In this hands-on cybersecurity simulation, I designed and executed an end-to-end adversary attack scenario across an isolated enterprise lab consisting of <span className="text-primary font-semibold">Kali Linux</span> as the attacking platform, <span className="text-primary font-semibold">Windows 10</span> as the victim endpoint, and <span className="text-primary font-semibold">Windows 11</span> running <span className="text-primary font-semibold">Splunk Enterprise</span> as the centralized SIEM. The primary objective was to generate realistic adversary activity, collect forensic endpoint logs via the <span className="text-primary font-semibold">Splunk Universal Forwarder</span>, reconstruct the complete intrusion timeline, and engineer high-fidelity threat detection rules mapped directly to the <span className="text-primary font-semibold">MITRE ATT&CK Framework</span>.
         </p>
-        <p className="text-left sm:text-justify">
+        <p className="text-justify">
           Throughout the offensive simulation, I walked through the full cyber attack lifecycle: staging a reverse HTTP payload using <span className="text-primary font-semibold">Metasploit (msfvenom & multi/handler)</span> to establish an active <span className="text-primary font-semibold">Meterpreter C2 session</span>, performing rapid host reconnaissance with native Windows utilities (<span className="text-primary font-semibold">whoami</span>, <span className="text-primary font-semibold">hostname</span>, <span className="text-primary font-semibold">systeminfo</span>), establishing administrative persistence through local backdoor accounts (<span className="text-primary font-semibold">net user</span>, <span className="text-primary font-semibold">net localgroup</span>) and elevated <span className="text-primary font-semibold">SYSTEM Task Scheduler (schtasks.exe)</span> entries, abusing <span className="text-primary font-semibold">Living-off-the-Land Binaries (LOLBINs)</span> via <span className="text-primary font-semibold">certutil.exe -urlcache</span> for covert payload transfer, and executing <span className="text-primary font-semibold">Mimikatz (disguised as GetClaude.exe)</span> to inspect privileged <span className="text-primary font-semibold">LSASS process memory</span>.
         </p>
-        <p className="text-left sm:text-justify">
+        <p className="text-justify">
           From the SOC defense perspective, I centralized and analyzed deep endpoint telemetry collected by <span className="text-primary font-semibold">Microsoft Sysmon</span> (Process Creation Event 1, Network Sockets Event 3, Process Access Event 10, File Creation Event 11) and <span className="text-primary font-semibold">Windows Security Audit Logs</span> (Events 4688, 4720, 4732, and 4698). By correlating parent-child process lineage, network sockets, and unique Sysmon <span className="text-primary font-semibold">ProcessGuid</span> tokens, I transformed disparate logs into an uninterrupted chronological attack timeline, validated hunt searches using <span className="text-primary font-semibold">Splunk SPL</span>, and authored production-ready <span className="text-primary font-semibold">Sigma Rules</span> to detect and alert on suspicious adversary behaviors in enterprise environments.
         </p>
       </div>
@@ -352,7 +352,7 @@ export default function AttackTreeMap() {
 
             {/* Simple Short Starting Paragraph from PDF */}
             <div className="relative z-10">
-              <p className="text-xs sm:text-sm text-foreground/90 leading-relaxed bg-foreground/[0.02] p-3 sm:p-3.5 rounded-lg border border-foreground/6">
+              <p className="text-xs sm:text-sm text-foreground/90 leading-relaxed bg-foreground/[0.02] p-3 sm:p-3.5 rounded-lg border border-foreground/6 text-justify">
                 {activePhase.paragraph}
               </p>
             </div>
