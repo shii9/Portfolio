@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Github, ExternalLink, Shield, Terminal, Search, Link2, Cpu, EyeOff } from "lucide-react";
 import { fadeUpProps, staggerItemProps } from "@/lib/animations";
 import { Section, GlowBlob, SectionHeading } from "@/components/layout/Section";
+import KillChainMap from "@/components/sections/KillChainMap";
 
 // Newest projects first, based on GitHub repository creation dates.
 const projects = [
@@ -91,7 +92,23 @@ export default function Projects() {
       <GlowBlob position="right" />
 
       {/* Section Header */}
-      <SectionHeading eyebrow="What I've Built" title="Projects" />
+      <SectionHeading eyebrow="What I've Built & Simulated" title="Projects & Simulations" />
+
+      {/* Flagship SOC Simulation with Interactive Cyber Kill Chain Map */}
+      <motion.div {...fadeUpProps(0.05)} className="mb-14">
+        <KillChainMap />
+      </motion.div>
+
+      {/* Sub-header for Security Tools & Software */}
+      <motion.div {...fadeUpProps(0.1)} className="mb-8">
+        <p className="text-primary font-semibold text-xs tracking-widest uppercase mb-1">
+          Security Tools & Software
+        </p>
+        <h3 className="text-2xl font-serif font-bold text-foreground">
+          Applications & Repositories
+        </h3>
+        <div className="h-0.5 w-12 bg-primary/60 rounded-full mt-2" />
+      </motion.div>
 
       {/* Projects Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">

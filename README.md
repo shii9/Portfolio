@@ -37,7 +37,7 @@ The site features a cyberpunk-inspired aesthetic with animated 3D elements, a cu
 | 🌀 **Animated Hero** | 3D CyberShield, hex grid background, word-by-word headline reveal |
 | 🖱️ **Custom Cursor** | Glow effect + crack particle trail on click |
 | 📊 **Animated Stats** | CountUp numbers that animate on scroll into view |
-| 🗂️ **Sections** | Hero · Skills · Projects · Research & Simulations · Experience · Achievements · Contact |
+| 🗂️ **Sections** | Hero · Skills · Projects & Simulations · Research · Experience · Achievements · Contact |
 | 📱 **Fully Responsive** | Mobile-first layout, works on all screen sizes |
 | ⚡ **Performance** | Code-split chunks, gzip <100 kB per bundle, fast Vite build |
 | ♿ **Accessible** | Respects `prefers-reduced-motion`, semantic HTML |
@@ -49,10 +49,11 @@ The site features a cyberpunk-inspired aesthetic with animated 3D elements, a cu
 
 - **Hero** — Name, rotating role badge (Security Researcher · Bug Hunter · Pen Tester · …), education, location, and social links
 - **Skills** — Grouped skill cards: Security tools, programming languages, frameworks, platforms
-- **Projects** — Featured security and development projects with tech stack tags, live demos, and GitHub links
-- **Research, Simulations & Write-ups** — Multi-disciplinary security research:
+- **Projects & Simulations** — Flagship threat simulations and security development tools:
+  - **Flagship SOC Threat Simulation & DFIR** — Complete endpoint compromise with an interactive **Cyber Kill Chain Map**, expandable telemetry breakdown (Sysmon / Windows Security), Splunk SPL hunt queries, and full investigation reports (`.pdf` / `.docx`)
+  - **Security Tools & Software Applications** — Open-source tools (*EchoMe, DorkNio, UrlShine, Nio AI Assistant, LSB Steganography, ReconNio*)
+- **Research & Write-ups** — Academic papers and published technical write-ups:
   - **Research Experience** — Academic publications on Explainable AI (XAI) + NIDS and User Cyber Risk Modeling
-  - **Simulations** — Hands-on SOC Threat Detection & DFIR Simulations with full investigation reports (`.pdf` / `.docx`) and repository artifacts
   - **Write-ups** — In-depth lab guides (*Splunk SOC Home Lab*, *curl*, *FFUF*)
 - **Experience** — Work history, research positions, and internships in interactive timeline format
 - **Achievements** — CTF wins, certifications, and academic milestones
@@ -60,7 +61,7 @@ The site features a cyberpunk-inspired aesthetic with animated 3D elements, a cu
 
 ---
 
-## 🔬 Featured SOC Simulation & Research
+## 🔬 Featured SOC Threat Simulation (Projects Section)
 
 ### 🛡️ SOC Threat Detection Analysis Simulation 1: Endpoint Compromise & Log Correlation
 * **Simulation Repository:** [shii9/SOC_Simulation (Simulation 1)](https://github.com/shii9/SOC_Simulation/tree/main/SOC_Investigation_Simulation_1)
