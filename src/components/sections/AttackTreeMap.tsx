@@ -328,7 +328,7 @@ export default function AttackTreeMap() {
 
       {/* ── Active Phase Details (Simple Starting Paragraph from Report) ── */}
       <div className="mt-4 relative z-10">
-        <div className="rounded-xl border border-primary/35 bg-background/80 backdrop-blur-sm p-4 sm:p-6 shadow-[0_4px_24px_rgba(255,107,53,0.08)] relative overflow-hidden transition-all duration-300">
+        <div className="rounded-xl border border-primary/35 bg-background/80 backdrop-blur-sm p-4 sm:p-5 shadow-[0_4px_24px_rgba(255,107,53,0.08)] relative overflow-hidden transition-all duration-300">
           {/* Subtle corner glow */}
           <div className="absolute top-0 right-0 w-36 h-36 bg-primary/8 rounded-full blur-[60px] pointer-events-none" />
 
@@ -357,13 +357,13 @@ export default function AttackTreeMap() {
 
           {/* Simple Short Starting Paragraph from PDF */}
           <div className="relative z-10">
-            <p className="text-xs sm:text-sm text-foreground/90 leading-relaxed bg-foreground/[0.02] p-4 rounded-lg border border-foreground/6">
+            <p className="text-xs sm:text-sm text-foreground/90 leading-relaxed bg-foreground/[0.02] p-3.5 rounded-lg border border-foreground/6">
               {activePhase.paragraph}
             </p>
           </div>
 
           {/* Previous / Next Phase Navigation */}
-          <div className="mt-4 pt-3 border-t border-foreground/8 flex items-center justify-between text-xs relative z-10">
+          <div className="mt-2.5 flex items-center justify-between text-xs relative z-10">
             <div>
               {activeIndex > 0 ? (
                 <button
