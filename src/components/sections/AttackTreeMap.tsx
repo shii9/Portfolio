@@ -283,15 +283,6 @@ export default function AttackTreeMap() {
                     : "bg-foreground/[0.02] border-foreground/8 hover:border-primary/35 hover:bg-foreground/[0.05]"
                 }`}
               >
-                {/* Active indicator bar */}
-                <div
-                  className={`absolute top-0 left-0 right-0 h-0.5 transition-all duration-300 ${
-                    isActive
-                      ? "bg-primary shadow-[0_0_8px_rgba(255,107,53,0.8)]"
-                      : "bg-transparent group-hover:bg-primary/25"
-                  }`}
-                />
-
                 <div className="flex items-center justify-between w-full mb-3">
                   <span
                     className={`text-[11px] font-mono font-bold px-2 py-0.5 rounded transition-colors ${
