@@ -1,5 +1,16 @@
 import { motion } from "framer-motion";
-import { BrainCircuit, Network, FileText, ExternalLink, Shield, ArrowRight } from "lucide-react";
+import {
+  BrainCircuit,
+  Network,
+  FileText,
+  ExternalLink,
+  Shield,
+  ArrowRight,
+  ShieldAlert,
+  Download,
+  Github,
+  Terminal,
+} from "lucide-react";
 import { fadeUpProps, fadeSoftProps, fadeSubtleProps } from "@/lib/animations";
 
 const researchInterest = {
@@ -39,6 +50,56 @@ const researchData = [
       "Designed a SHAP-based cyber risk score framework using interpretable machine learning to predict identity theft vulnerability across users. Achieved high classification accuracy, finding users at risk or not with a hybrid ensemble model and identified the key factors influencing user risk profiles using SHAP-driven analysis.",
     tags: ["Identity Theft", "User Risk", "SHAP", "Ensemble Learning"],
     link: "#",
+  },
+];
+
+const simulationsData = [
+  {
+    type: "SOC Simulation & DFIR",
+    role: "SOC Threat Detection Analysis Simulation: Endpoint Compromise & Log Correlation",
+    company: "Splunk Enterprise · Sysmon · MITRE ATT&CK",
+    date: "Oct 2026",
+    link: "https://github.com/shii9/SOC_Simulation/tree/main/SOC_Investigation_Simulation_1",
+    reportDocx: `${import.meta.env.BASE_URL}reports/Splunk-SOC-Investigation-(1)-Report.docx`,
+    reportPdf: `${import.meta.env.BASE_URL}reports/Splunk-SOC-Investigation-(1)-Report.pdf`,
+    highlight: "Simulation 1",
+    icon: ShieldAlert,
+    description:
+      "An end-to-end Security Operations Center (SOC) threat detection simulation and digital forensics & incident response (DFIR) investigation. Reconstructed a controlled multi-stage Windows endpoint compromise from initial delivery and reverse HTTP Meterpreter C2 through local reconnaissance, privilege escalation, elevated scheduled-task persistence, ingress tool transfer via certutil, and Mimikatz credential-access preparation. Investigated and correlated endpoint telemetry in Splunk Enterprise across Sysmon events (Process Creation, Network Connections, Process Access) and Windows Security logs, mapped adversarial techniques to MITRE ATT&CK, and authored actionable Sigma rules translated into production Splunk SPL hunt alerts.",
+    phases: [
+      {
+        stage: "Execution & C2",
+        detail: "Meterpreter reverse_http session established from Kali to Windows 10 (Sysmon EID 1 & 3, Win Event 4688)",
+      },
+      {
+        stage: "Discovery & PrivEsc",
+        detail: "Internal reconnaissance (whoami, hostname, systeminfo); local backdoor user created and added to local Administrators (Win Event 4720/4732)",
+      },
+      {
+        stage: "Persistence",
+        detail: "Configured scheduled task executing payload at logon with SYSTEM privileges (Win Event 4698)",
+      },
+      {
+        stage: "Tool Staging & Creds",
+        detail: "LOLBIN certutil download of Mimikatz disguised as GetClaude.exe; invoked privilege::debug (MITRE T1003)",
+      },
+      {
+        stage: "SIEM Correlation",
+        detail: "Splunk Enterprise multi-source log correlation across ProcessGuid, Sigma rule generation, and ATT&CK Navigator layer mapping",
+      },
+    ],
+    tags: [
+      "Splunk Enterprise",
+      "Sysmon Telemetry",
+      "MITRE ATT&CK",
+      "Sigma Rules",
+      "SPL Threat Hunting",
+      "Incident Response",
+      "DFIR",
+      "Meterpreter C2",
+      "LOLBINs (certutil)",
+      "Mimikatz",
+    ],
   },
 ];
 
@@ -157,8 +218,8 @@ export default function Research() {
         {...fadeUpProps()}
         className="mb-10"
       >
-        <p className="text-primary font-semibold text-sm tracking-widest uppercase mb-3">Publications</p>
-        <h2 className="text-4xl md:text-5xl font-serif font-bold text-foreground">Research & Write-ups</h2>
+        <p className="text-primary font-semibold text-sm tracking-widest uppercase mb-3">Publications & Labs</p>
+        <h2 className="text-4xl md:text-5xl font-serif font-bold text-foreground">Research, Simulations & Write-ups</h2>
         <div className="h-1 w-20 bg-primary rounded-full mt-5" />
       </motion.div>
 
@@ -253,6 +314,131 @@ export default function Research() {
             </motion.div>
           );
         })}
+      </div>
+
+      {/* Sub Header for Simulations */}
+      <motion.div
+        {...fadeUpProps()}
+        className="mb-12"
+      >
+        <p className="text-primary font-semibold text-xs tracking-widest uppercase mb-2">Hands-on Labs</p>
+        <h3 className="text-2xl font-serif font-bold text-foreground">Simulations</h3>
+        <div className="h-0.5 w-12 bg-primary/60 rounded-full mt-3" />
+      </motion.div>
+
+      {/* Timeline Layout for Simulations */}
+      <div className="relative mb-12">
+        <div className="space-y-6 sm:space-y-8">
+          {simulationsData.map((item, idx) => {
+            const Icon = item.icon;
+            return (
+              <motion.div
+                key={idx}
+                {...fadeSubtleProps(idx * 0.06)}
+                className="relative pl-16 sm:pl-20 md:pl-20"
+              >
+                <div className="absolute left-0 w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-primary/15 border border-primary/30 flex items-center justify-center text-primary shadow-[0_0_20px_rgba(255,107,53,0.15)] z-10 mt-1">
+                  <Icon size={20} />
+                </div>
+
+                <motion.div className="bg-card/50 border border-foreground/8 rounded-2xl p-5 md:p-6 hover:border-primary/25 transition-[border-color,box-shadow,opacity] duration-300 group">
+                  {/* Category tag up top */}
+                  <div className="mb-2">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-primary/90 bg-primary/10 px-2.5 py-0.5 rounded-md border border-primary/20 inline-block">
+                      {item.type}
+                    </span>
+                  </div>
+
+                  <div className="flex flex-col md:flex-row md:items-start justify-between mb-3 gap-2">
+                    <div>
+                      <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors duration-200">
+                        {item.role}
+                      </h3>
+                      <p className="text-primary/80 text-sm mt-1 font-medium">{item.company}</p>
+                    </div>
+                    <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+                      {item.highlight && (
+                        <span className="text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
+                          {item.highlight}
+                        </span>
+                      )}
+                      <span className="text-muted-foreground text-sm bg-foreground/5 px-3 py-1 rounded-full border border-foreground/8 whitespace-nowrap">
+                        {item.date}
+                      </span>
+                    </div>
+                  </div>
+
+                  <p className="text-muted-foreground leading-relaxed mb-4 text-sm text-left sm:text-justify">{item.description}</p>
+
+                  {/* Investigation Breakdown Grid */}
+                  <div className="my-4 rounded-xl bg-background/50 border border-foreground/6 p-4">
+                    <div className="flex items-center gap-2 mb-3 text-xs font-semibold uppercase tracking-wider text-primary/90">
+                      <Terminal size={14} className="text-primary" />
+                      <span>Investigation Workflow & Attack Lifecycle</span>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 text-xs text-muted-foreground">
+                      {item.phases.map((phase, pIdx) => (
+                        <div key={pIdx} className="flex items-start gap-2 bg-foreground/[0.02] p-2.5 rounded-lg border border-foreground/5">
+                          <span className="font-semibold text-foreground shrink-0 text-[11px] bg-primary/10 text-primary px-1.5 py-0.5 rounded">
+                            {phase.stage}:
+                          </span>
+                          <span className="leading-snug">{phase.detail}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mt-4">
+                    <div className="flex flex-wrap gap-2">
+                      {item.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="text-xs font-medium text-primary/80 bg-primary/8 px-3 py-1 rounded-full border border-primary/15"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap shrink-0">
+                      <a
+                        href={item.reportPdf}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold text-primary-foreground bg-primary hover:bg-primary/90 px-3.5 py-1.5 rounded-full transition-all duration-200 shadow-sm hover:shadow-primary/20"
+                      >
+                        <FileText size={14} />
+                        <span>View Report (PDF)</span>
+                        <ExternalLink size={12} />
+                      </a>
+
+                      <a
+                        href={item.reportDocx}
+                        download="Splunk-SOC-Investigation-(1)-Report.docx"
+                        className="inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold text-foreground bg-foreground/5 hover:bg-foreground/10 border border-foreground/10 px-3.5 py-1.5 rounded-full transition-all duration-200"
+                        title="Download Original Investigation Report (.docx)"
+                      >
+                        <Download size={14} />
+                        <span>Download (.docx)</span>
+                      </a>
+
+                      <a
+                        href={item.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold text-foreground bg-foreground/5 hover:bg-foreground/10 border border-foreground/10 px-3.5 py-1.5 rounded-full transition-all duration-200"
+                      >
+                        <Github size={14} />
+                        <span>GitHub Repo</span>
+                        <ExternalLink size={12} />
+                      </a>
+                    </div>
+                  </div>
+                </motion.div>
+              </motion.div>
+            );
+          })}
+        </div>
       </div>
 
       {/* Sub Header for Write-ups */}

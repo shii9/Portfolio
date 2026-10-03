@@ -37,9 +37,9 @@ The site features a cyberpunk-inspired aesthetic with animated 3D elements, a cu
 | 🌀 **Animated Hero** | 3D CyberShield, hex grid background, word-by-word headline reveal |
 | 🖱️ **Custom Cursor** | Glow effect + crack particle trail on click |
 | 📊 **Animated Stats** | CountUp numbers that animate on scroll into view |
-| 🗂️ **Sections** | Hero · Skills · Projects · Research · Experience · Achievements · Contact |
+| 🗂️ **Sections** | Hero · Skills · Projects · Research & Simulations · Experience · Achievements · Contact |
 | 📱 **Fully Responsive** | Mobile-first layout, works on all screen sizes |
-| ⚡ **Performance** | Code-split chunks, gzip <100 kB per bundle, 2051 modules in 4.4s build |
+| ⚡ **Performance** | Code-split chunks, gzip <100 kB per bundle, fast Vite build |
 | ♿ **Accessible** | Respects `prefers-reduced-motion`, semantic HTML |
 | 🔒 **Security Headers** | `public/_headers` with CSP, HSTS, X-Frame-Options |
 
@@ -49,11 +49,29 @@ The site features a cyberpunk-inspired aesthetic with animated 3D elements, a cu
 
 - **Hero** — Name, rotating role badge (Security Researcher · Bug Hunter · Pen Tester · …), education, location, and social links
 - **Skills** — Grouped skill cards: Security tools, programming languages, frameworks, platforms
-- **Projects** — Featured security and development projects with tech stack tags and links
-- **Research** — AI-integrated cybersecurity research, papers, and publications
-- **Experience** — Work history and internships in timeline format
+- **Projects** — Featured security and development projects with tech stack tags, live demos, and GitHub links
+- **Research, Simulations & Write-ups** — Multi-disciplinary security research:
+  - **Research Experience** — Academic publications on Explainable AI (XAI) + NIDS and User Cyber Risk Modeling
+  - **Simulations** — Hands-on SOC Threat Detection & DFIR Simulations with full investigation reports (`.pdf` / `.docx`) and repository artifacts
+  - **Write-ups** — In-depth lab guides (*Splunk SOC Home Lab*, *curl*, *FFUF*)
+- **Experience** — Work history, research positions, and internships in interactive timeline format
 - **Achievements** — CTF wins, certifications, and academic milestones
-- **Contact** — Contact form with social media links
+- **Contact** — Interactive contact form with verified social media links
+
+---
+
+## 🔬 Featured SOC Simulation & Research
+
+### 🛡️ SOC Threat Detection Analysis Simulation 1: Endpoint Compromise & Log Correlation
+* **Simulation Repository:** [shii9/SOC_Simulation (Simulation 1)](https://github.com/shii9/SOC_Simulation/tree/main/SOC_Investigation_Simulation_1)
+* **Investigation Report:** Available on the portfolio in **PDF** (interactive viewing) and **DOCX** (downloadable) format
+* **Architecture:** Kali Linux (Attacker) → Windows 10 (Sysmon Endpoint) → Windows 11 (Splunk Enterprise SIEM)
+* **Scope & Attack Lifecycle:**
+  1. *Execution & C2:* Meterpreter `reverse_http` payload staging and listener callback (Sysmon EID 1 & 3, Win Event 4688)
+  2. *Discovery:* Host reconnaissance (`whoami`, `hostname`, `systeminfo`)
+  3. *Persistence & PrivEsc:* Backdoor local administrator account creation and SYSTEM-level Scheduled Task execution (Win Event 4698 / 4720)
+  4. *Tool Staging & Credential Prep:* Ingress tool transfer via LOLBIN `certutil.exe` pulling Mimikatz disguised as `GetClaude.exe`, invoking `privilege::debug` (MITRE T1003)
+  5. *SIEM Correlation & Threat Hunting:* Splunk SPL correlation across `ProcessGuid`, custom Sigma detection rules, and MITRE ATT&CK Navigator layer mapping
 
 ---
 
