@@ -130,37 +130,37 @@ export default function AttackTreeMap() {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 w-full sm:w-auto shrink-0">
+          <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap w-full sm:w-auto shrink-0">
             <a
               href={`${import.meta.env.BASE_URL}reports/Splunk-SOC-Investigation-(1)-Report.pdf`}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-[calc(50%-4px)] sm:w-[155px] inline-flex items-center justify-center gap-1.5 text-[11px] min-[400px]:text-xs sm:text-sm font-semibold text-primary-foreground bg-primary hover:bg-primary/90 px-2 sm:px-3.5 py-1.5 rounded-full transition-all duration-200 shadow-md hover:shadow-primary/25 whitespace-nowrap"
+              className="w-[calc(50%-4px)] sm:w-auto inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold text-primary-foreground bg-primary hover:bg-primary/90 px-2.5 sm:px-3.5 py-1.5 rounded-full transition-all duration-200 shadow-md hover:shadow-primary/25 whitespace-nowrap"
             >
-              <FileText size={13} className="shrink-0" />
-              <span className="truncate">View Report (PDF)</span>
-              <ExternalLink size={11} className="shrink-0" />
+              <FileText size={14} />
+              <span>View Report (PDF)</span>
+              <ExternalLink size={11} />
             </a>
 
             <a
               href={`${import.meta.env.BASE_URL}reports/Splunk-SOC-Investigation-(1)-Report.docx`}
               download="Splunk-SOC-Investigation-(1)-Report.docx"
-              className="w-[calc(50%-4px)] sm:w-[155px] inline-flex items-center justify-center gap-1.5 text-[11px] min-[400px]:text-xs sm:text-sm font-semibold text-foreground bg-foreground/5 hover:bg-foreground/10 border border-foreground/15 px-2 sm:px-3.5 py-1.5 rounded-full transition-all duration-200 whitespace-nowrap"
+              className="w-[calc(50%-4px)] sm:w-auto inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold text-foreground bg-foreground/5 hover:bg-foreground/10 border border-foreground/15 px-2.5 sm:px-3 py-1.5 rounded-full transition-all duration-200 whitespace-nowrap"
               title="Download Original Investigation Report (.docx)"
             >
-              <Download size={13} className="shrink-0" />
-              <span className="truncate">Download (.docx)</span>
+              <Download size={14} />
+              <span>Download (.docx)</span>
             </a>
 
             <a
               href="https://github.com/shii9/SOC_Simulation/tree/main/SOC_Investigation_Simulation_1"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-[calc(50%-4px)] sm:w-[155px] inline-flex items-center justify-center gap-1.5 text-[11px] min-[400px]:text-xs sm:text-sm font-semibold text-foreground bg-foreground/5 hover:bg-foreground/10 border border-foreground/15 px-2 sm:px-3.5 py-1.5 rounded-full transition-all duration-200 whitespace-nowrap"
+              className="w-[calc(50%-4px)] sm:w-auto inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold text-foreground bg-foreground/5 hover:bg-foreground/10 border border-foreground/15 px-2.5 sm:px-3 py-1.5 rounded-full transition-all duration-200 whitespace-nowrap"
             >
-              <Github size={13} className="shrink-0" />
-              <span className="truncate">GitHub Repo</span>
-              <ExternalLink size={11} className="shrink-0" />
+              <Github size={14} />
+              <span>GitHub Repo</span>
+              <ExternalLink size={11} />
             </a>
           </div>
         </div>
