@@ -220,21 +220,20 @@ export default function Hero() {
         initial={{ opacity: 0, y: 44, filter: BLUR.soft }}
         animate={{ opacity: 1, y: 0, filter: BLUR.none }}
         transition={smoothTransition(0.2)}
-        className="mt-4 md:mt-5 mb-10 w-full sm:max-w-4xl grid grid-cols-2 gap-x-5 gap-y-6 sm:flex sm:flex-wrap sm:items-center sm:gap-x-8 sm:gap-y-5 py-6 border-y border-foreground/10"
+        className="mt-4 md:mt-5 mb-10 w-full sm:max-w-2xl grid grid-cols-2 gap-x-5 gap-y-6 sm:flex sm:flex-wrap sm:items-center sm:gap-x-8 sm:gap-y-5 py-6 border-y border-foreground/10"
       >
         {[
-          { value: "2+", label: "Yrs Experience" },
-          { value: "7+", label: "Projects" },
-          { value: "2+", label: "Simulation Lab" },
+          { value: "2+", label: "Simulation" },
+          { value: "7+", label: "Lab" },
           { value: "5+", label: "Vulnerability Disclosed" },
           { value: "2+", label: "Research Papers" },
         ].map((stat, idx) => {
-          const divider =
-            idx === 0
-              ? ""
-              : idx % 2 === 1
-              ? "border-l border-foreground/12 pl-4 sm:pl-8"
-              : "sm:border-l sm:border-foreground/12 sm:pl-8";
+          const divider = [
+            "",
+            "border-l border-foreground/12 pl-4 sm:pl-8",
+            "sm:border-l sm:border-foreground/12 sm:pl-8",
+            "border-l border-foreground/12 pl-4 sm:pl-8",
+          ][idx];
           return (
             <div key={idx} className={`flex flex-col ${divider}`}>
               <CountUp
