@@ -12,3 +12,8 @@
 # Long-lived immutable caching for hashed build assets
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
+
+# Explicit attachment header for resume PDF
+/resume.pdf
+  Content-Type: application/pdf
+  Content-Disposition: attachment; filename="Sourov_Hossen_CV.pdf"
