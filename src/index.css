@@ -8,7 +8,7 @@ html {
 }
 
 section[id] {
-  scroll-margin-top: 96px;
+  scroll-margin-top: 0;
 }
 
 /* Ensure headings have ample line-height and room for descenders (j, g, y, p) */

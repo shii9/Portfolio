@@ -16,7 +16,7 @@ const aboutData = {
 
 export default function About() {
   return (
-    <section id="about" className="pt-[96px] pb-8 md:pb-10 relative">
+    <section id="about" className="pt-[116px] pb-8 md:pb-10 relative">
       <div className="absolute right-0 top-1/2 -translate-y-1/2 w-96 h-96 bg-primary/5 rounded-full blur-[120px] pointer-events-none" />
 
       <motion.div {...fadeUpProps()} className="mb-10">

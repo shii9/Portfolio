@@ -47,7 +47,7 @@ export function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section id={id} className={`pt-24 md:pt-28 pb-8 md:pb-10 relative ${className}`}>
+    <section id={id} className={`pt-[116px] pb-8 md:pb-10 relative ${className}`}>
       {children}
     </section>
   );

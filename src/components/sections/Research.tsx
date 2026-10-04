@@ -150,7 +150,7 @@ function ResearchCard({
 
 export default function Research() {
   return (
-    <section id="research" className="pt-[96px] pb-8 md:pb-10 relative">
+    <section id="research" className="pt-[116px] pb-8 md:pb-10 relative">
       <div className="absolute left-0 top-1/2 -translate-y-1/2 w-96 h-96 bg-primary/5 rounded-full blur-[120px] pointer-events-none" />
 
       <motion.div

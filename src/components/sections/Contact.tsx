@@ -35,7 +35,7 @@ const socials = [
 
 export default function Contact() {
   return (
-    <section id="contact" className="pt-[96px] pb-12 relative">
+    <section id="contact" className="pt-[116px] pb-12 relative">
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-primary/5 rounded-full blur-[150px] pointer-events-none" />
 
       <div className="max-w-4xl mx-auto text-center relative z-10">
