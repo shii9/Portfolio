@@ -110,6 +110,31 @@ export default function Navbar() {
     }, 1000); // 1000ms matches the smooth scroll animation duration
   };
 
+  const handleDownloadCV = async (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(`${import.meta.env.BASE_URL}resume.pdf`);
+      if (!response.ok) throw new Error("Failed to fetch resume");
+      const blob = await response.blob();
+      const pdfBlob = new Blob([blob], { type: "application/pdf" });
+      const blobUrl = window.URL.createObjectURL(pdfBlob);
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = "Sourov_Hossen_CV.pdf";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setTimeout(() => window.URL.revokeObjectURL(blobUrl), 2000);
+    } catch {
+      const link = document.createElement("a");
+      link.href = `${import.meta.env.BASE_URL}resume.pdf`;
+      link.download = "Sourov_Hossen_CV.pdf";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
+
   // Lock body scroll while drawer is open, and broadcast its state so other
   // fixed overlays (e.g. the back-to-top button) can hide behind the drawer.
   useEffect(() => {
@@ -250,10 +275,9 @@ export default function Navbar() {
           <a
             href={`${import.meta.env.BASE_URL}resume.pdf`}
             download="Sourov_Hossen_CV.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
+            onClick={handleDownloadCV}
             data-testid="button-download-cv"
-            className="flex items-center justify-center gap-2 text-sm font-semibold text-white bg-primary hover:bg-primary/85 px-4 h-11 rounded-full transition-all duration-200 hover:shadow-[0_0_22px_rgba(255,107,53,0.45)]"
+            className="flex items-center justify-center gap-2 text-sm font-semibold text-white bg-primary hover:bg-primary/85 px-4 h-11 rounded-full transition-all duration-200 hover:shadow-[0_0_22px_rgba(255,107,53,0.45)] cursor-pointer"
           >
             <Download size={16} />
             <span>Download CV</span>
@@ -405,16 +429,14 @@ export default function Navbar() {
                   </button>
                 </div>
 
-                 <a
+                <a
                   href={`${import.meta.env.BASE_URL}resume.pdf`}
                   download="Sourov_Hossen_CV.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClickCapture={(e) => {
-                    // Prevent closing the menu when clicking the button
-                    e.stopPropagation();
+                  onClick={(e) => {
+                    handleDownloadCV(e);
+                    setMobileMenuOpen(false);
                   }}
-                  className="flex items-center justify-center gap-2 w-full text-sm font-semibold text-white bg-primary hover:bg-primary/90 px-6 py-3.5 rounded-full transition-all hover:shadow-[0_0_24px_rgba(255,107,53,0.45)]"
+                  className="flex items-center justify-center gap-2 w-full text-sm font-semibold text-white bg-primary hover:bg-primary/90 px-6 py-3.5 rounded-full transition-all hover:shadow-[0_0_24px_rgba(255,107,53,0.45)] cursor-pointer"
                 >
                   <Download size={16} />
                   <span>Download CV</span>
