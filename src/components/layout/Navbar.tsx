@@ -125,27 +125,48 @@ export default function Navbar() {
   }, [mobileMenuOpen]);
 
   useEffect(() => {
-    const sections = navLinks.map((l) => l.href.replace("#", ""));
-    const observers: IntersectionObserver[] = [];
+    const handleScroll = () => {
+      if (isManualScroll.current) return;
 
-    sections.forEach((id) => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      const obs = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting && !isManualScroll.current) {
-            const link = navLinks.find((l) => l.href === `#${id}`);
-            if (link) setActive(link.name);
+      const scrollY = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+
+      // 1. Bottom of page threshold -> activate last link ("Connect")
+      if (scrollY + windowHeight >= documentHeight - 60) {
+        setActive(navLinks[navLinks.length - 1].name);
+        return;
+      }
+
+      // 2. Near top of page -> activate first link ("Home")
+      if (scrollY < 120) {
+        setActive(navLinks[0].name);
+        return;
+      }
+
+      // 3. Find the section currently in view based on reading zone (offset 160px from top)
+      const targetY = 160;
+      let currentSection = navLinks[0].name;
+
+      for (const link of navLinks) {
+        const id = link.href.replace("#", "");
+        const el = document.getElementById(id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= targetY) {
+            currentSection = link.name;
           }
-        },
-        { threshold: 0.4 }
-      );
-      obs.observe(el);
-      observers.push(obs);
-    });
+        }
+      }
+
+      setActive(currentSection);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
 
     return () => {
-      observers.forEach((o) => o.disconnect());
+      window.removeEventListener("scroll", handleScroll);
       if (timeoutId.current) clearTimeout(timeoutId.current);
     };
   }, []);

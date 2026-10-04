@@ -43,7 +43,7 @@ export default function Contact() {
           {...fadeUpProps()}
         >
           <p className="text-primary font-semibold text-sm tracking-widest uppercase mb-4">Get In Touch</p>
-          <h2 className="text-4xl md:text-6xl font-serif font-bold text-foreground mb-6">
+          <h2 className="text-4xl md:text-6xl font-serif font-bold text-foreground mb-6 pb-2 leading-[1.2]">
             Let's Connect
           </h2>
           <p className="text-muted-foreground text-lg mb-14 leading-relaxed max-w-xl mx-auto text-left sm:text-justify">

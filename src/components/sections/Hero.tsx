@@ -254,8 +254,8 @@ export default function Hero() {
       {/* About Me Section — full page width */}
       <motion.div {...fadeUpProps(0.25)} className="mb-8 w-full">
         <p className="text-primary font-semibold text-sm tracking-widest uppercase mb-3">Introduction</p>
-        <h2 className="text-3xl md:text-4xl font-serif font-bold text-foreground mb-2">About Me</h2>
-        <div className="h-1 w-16 bg-primary rounded-full mt-3 mb-6" />
+        <h2 className="text-3xl md:text-4xl font-serif font-bold text-foreground mb-2 pb-2 leading-[1.25]">About Me</h2>
+        <div className="h-1 w-16 bg-primary rounded-full mt-2 mb-6" />
 
         <div className="bg-card/50 border border-foreground/8 rounded-2xl p-6 md:p-8 w-full">
           <div className="max-w-none text-muted-foreground text-sm leading-relaxed space-y-4 text-justify">

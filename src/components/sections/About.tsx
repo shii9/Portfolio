@@ -21,8 +21,8 @@ export default function About() {
 
       <motion.div {...fadeUpProps()} className="mb-10">
         <p className="text-primary font-semibold text-sm tracking-widest uppercase mb-3">Introduction</p>
-        <h2 className="text-4xl md:text-5xl font-serif font-bold text-foreground">About Me</h2>
-        <div className="h-1 w-20 bg-primary rounded-full mt-5" />
+        <h2 className="text-4xl md:text-5xl font-serif font-bold text-foreground pb-3 leading-[1.2]">About Me</h2>
+        <div className="h-1 w-20 bg-primary rounded-full mt-3" />
       </motion.div>
 
       <motion.div

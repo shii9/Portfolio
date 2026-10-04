@@ -8,7 +8,12 @@ html {
 }
 
 section[id] {
-  scroll-margin-top: 0;
+  scroll-margin-top: 96px;
+}
+
+/* Ensure headings have ample line-height and room for descenders (j, g, y, p) */
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.25 !important;
 }
 
 @custom-variant dark (&:is(.dark *));
@@ -89,7 +94,7 @@ section[id] {
   --destructive-border: hsl(0 84% 60% / 0.2);
 
   --app-font-sans: 'Outfit', sans-serif;
-  --app-font-serif: 'Syne', sans-serif;
+  --app-font-serif: 'Outfit', sans-serif;
   --app-font-mono: 'Outfit', monospace;
   --radius: 0.75rem;
 }

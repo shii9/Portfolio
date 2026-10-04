@@ -73,11 +73,11 @@ export function SectionHeading({
       <p className="text-primary font-semibold text-sm tracking-widest uppercase mb-3">
         {eyebrow}
       </p>
-      <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-foreground">
+      <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-foreground pb-3 leading-[1.2]">
         {title}
       </h2>
       <div
-        className={`h-1 w-20 bg-primary rounded-full mt-5 ${centered ? "mx-auto" : ""}`}
+        className={`h-1 w-20 bg-primary rounded-full mt-3 ${centered ? "mx-auto" : ""}`}
       />
     </motion.div>
   );
@@ -100,10 +100,10 @@ export function SubHeading({
       <p className="text-primary font-semibold text-xs tracking-widest uppercase mb-2">
         {eyebrow}
       </p>
-      <h3 className="text-xl sm:text-2xl font-serif font-bold text-foreground">
+      <h3 className="text-xl sm:text-2xl font-serif font-bold text-foreground pb-3 leading-[1.25]">
         {title}
       </h3>
-      <div className="h-0.5 w-12 bg-primary/60 rounded-full mt-3" />
+      <div className="h-0.5 w-12 bg-primary/60 rounded-full mt-2.5" />
     </motion.div>
   );
 }

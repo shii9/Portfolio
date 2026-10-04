@@ -158,8 +158,8 @@ export default function Research() {
         className="mb-10"
       >
         <p className="text-primary font-semibold text-sm tracking-widest uppercase mb-3">Publications</p>
-        <h2 className="text-4xl md:text-5xl font-serif font-bold text-foreground">Research & Write-ups</h2>
-        <div className="h-1 w-20 bg-primary rounded-full mt-5" />
+        <h2 className="text-4xl md:text-5xl font-serif font-bold text-foreground pb-3 leading-[1.2]">Research & Write-ups</h2>
+        <div className="h-1 w-20 bg-primary rounded-full mt-3" />
       </motion.div>
 
       <motion.div
